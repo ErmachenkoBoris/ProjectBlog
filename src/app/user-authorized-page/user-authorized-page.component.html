@@ -1,0 +1,50 @@
+<div class="user-page">
+  <div class="user-page__header">
+    <div class="header_name-blog">Front-Man</div>
+  </div>
+
+  <div class="user-page__construct">
+    <div class="user-page__menu_container">
+  <div class="user-page__menu">
+    <div *ngFor="let topic of this.articleService.topics;let i = index;">
+      <div  (mouseenter)="change_back_info(i);" [style.background] ="this.background_menu_array[i]"
+           (mouseleave)="change_back_info(10)"
+           (click)="choose_articles(topic.topic);Set_name('');select_button(i)" class="menu__topic">{{topic.topic}}</div>
+    </div>
+    <div  (mouseenter)="change_back_info(11);" [style.background] ="this.background_menu_array[i]"
+          (mouseleave)="change_back_info(10)"
+          (click)="select_button(i)" class="menu__topic" style="color: green;"
+          [routerLink]="[{ outlets: { article_add: [''] } }]"> + Suggest</div>
+  </div>
+    </div>
+  <div class="user-page__context_container" [ngSwitch]="articleService.articles_choosen_names.length">
+    <span *ngSwitchCase="0">
+    <p  [style.background]="back_color" class = "user_page__info" >
+      Hello, friend!<br>
+      We're glad to see you here.<br>In this blog you can find a lot of interesting things concerning frontend development.
+      Just choose a theme and enjoy!<br> Also, you can write your own article.<br>
+      Or even offer your section and write an article there.<br>
+      The administrator will be happy to consider your proposal on topics for articles
+    </p>
+    </span>
+    <span *ngSwitchDefault>
+      <div *ngFor="let name of articleService.articles_choosen_names;let i = index;" class="user_age__names_article">
+            <div (click)="Set_name(name.name)" class="user_age__names_article_item"
+                 [routerLink]="[{ outlets: { article_read: [name.name] } }]">{{i}}. {{name.name}}</div>
+    </div>
+      <div class="user_age__button_add_article" [routerLink]="[{ outlets: { article_add: [articleService.articles_choosen_names[0].topic] } }]">
+        + write your article</div>
+    </span>
+    <!--<app-reading-article [article_name]="name_for_read" *ngIf="name_for_read"></app-reading-article>-->
+    <router-outlet name="article_add"></router-outlet>
+    <router-outlet name="article_read"></router-outlet>
+
+  </div>
+  </div>
+
+  <div class="user-page__footer">
+    <a href="https://vk.com/borisssta" class="footer__href">&nbsp;&nbsp;&nbsp;about&nbsp;</a>
+    <a href="https://vk.com/borisssta" class="footer__href">feedback&nbsp;</a>
+    <a href="https://vk.com/borisssta" class="footer__href">contacts&nbsp;</a>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<form class="form-register" [formGroup]="register_form" (ngSubmit)="Submit_form_register()">
+  <div class="form-register__item"><input type="text" class="item" formControlName="name" placeholder="name"></div>
+  <div class="error_message" *ngIf="this.register_form.get('name').getError('pattern') && this.register_form.controls['name'].touched">
+    use english letters</div>
+  <div class="error_message" *ngIf="this.register_form.get('name').getError('required') && this.register_form.controls['name'].touched">
+    field is required</div>
+
+  <div class="form-register__item"><input type="text" class="item" formControlName="surname" placeholder="surname"></div>
+  <div class="error_message" *ngIf="this.register_form.get('surname').getError('pattern') && this.register_form.controls['surname'].touched">
+    use english letters</div>
+  <div class="error_message" *ngIf="this.register_form.get('surname').getError('required') && this.register_form.controls['surname'].touched">
+    field is required</div>
+
+  <div class="form-register__item"><input type="text" class="item" formControlName="login" placeholder="login"></div>
+  <div class="error_message" *ngIf="this.register_form.get('login').getError('loginExist') && this.register_form.controls['login'].touched">
+    {{this.register_form.get('login').getError('loginExist')}}
+  </div>
+  <div class="error_message" *ngIf="this.register_form.get('login').getError('pattern') && this.register_form.controls['login'].touched">
+    use english letters & numbers</div>
+  <div class="error_message" *ngIf="this.register_form.get('login').getError('required') && this.register_form.controls['login'].touched">
+    field is required</div>
+
+  <div class="form-register__item"><input type="text" class="item" formControlName="email" placeholder="email"></div>
+  <div class="error_message" *ngIf="this.register_form.get('email').getError('emailExist') && this.register_form.controls['email'].touched">
+    {{this.register_form.get('email').getError('emailExist')}}
+  </div>
+  <div class="error_message" *ngIf="this.register_form.get('email').getError('required') && this.register_form.controls['email'].touched">
+  field is required
+</div>
+  <div class="error_message" *ngIf="this.register_form.get('email').getError('email') && this.register_form.controls['email'].touched">
+    wrong format
+  </div>
+
+  <div class="form-register__item"><input type="password" class="item" formControlName="password" placeholder="password"></div>
+  <div class="error_message" *ngIf="Get_password_error('password')">
+    {{this.register_form.get('password').getError('invalidPassword')}}
+  </div>
+  <div class="error_message" *ngIf="this.register_form.get('password').getError('required') && this.register_form.controls['password'].touched">
+    field is required
+  </div>
+  <div class="warning_message" [ngSwitch]="this.difficult_password">
+    <div class="warning_message_easy" *ngSwitchCase="1">too easy password</div>
+    <div class="warning_message_hard" *ngSwitchCase="2">good password</div>
+  </div>
+
+  <div class="form-register__item"><input type="password" class="item" formControlName="password_check" placeholder="repeat password"></div>
+  <div class="error_message" *ngIf="Get_password_error('password_check')">
+    {{this.register_form.get('password_check').getError('invalidPassword')}}
+  </div>
+  <div class="error_message" *ngIf="this.register_form.get('password_check').getError('required') && this.register_form.controls['password_check'].touched">
+    field is required
+  </div>
+
+  <button *ngIf="Check_all_validators()" type="submit" class="form-register__submit_button" >sign up</button>
+</form>

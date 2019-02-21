@@ -1,0 +1,33 @@
+<div class="article_add">
+  <div [ngSwitch]="this.Return_suggest()">
+  <div *ngSwitchCase="0" class="article_add__header">Write an article in the section {{this.topic}}
+  </div>
+    <div *ngSwitchCase="1" class="article_add__header_suggest">
+      Here you can write an article in a non-existent section. <br>The administrator will consider your proposal!
+    </div>
+  <button (click)="this.Close_add_form()" class="close_add_form_bottom">
+    X
+  </button>
+  <form class="article_add__add_form" [formGroup]="add_form" >
+
+    <div *ngIf="Return_suggest()">
+    <div class="add_form__name_article"><input class="name_article__item_name" type="text" placeholder="NEW TOPIC NAME" formControlName="name_topic"></div>
+    <div class="error_message" *ngIf="this.add_form.get('name_topic').getError('required') && this.add_form.controls['name_topic'].touched">
+      field is required</div>
+    </div>
+
+    <div class="add_form__name_article"><input class="name_article__item_name" type="text" placeholder="Article name" formControlName="name_article"></div>
+    <div class="error_message" *ngIf="this.add_form.get('name_article').getError('required') && this.add_form.controls['name_article'].touched">
+      field is required</div>
+    <div class="error_message" *ngIf="this.add_form.get('name_article').getError('nameExist') && this.add_form.controls['name_article'].touched">
+      This name already exist</div>
+
+    <div><textarea class="add_form__text" placeholder="write your article" formControlName="text"></textarea></div>
+    <div class="error_message" *ngIf="this.add_form.get('text').getError('required') && this.add_form.controls['text'].touched">
+      field is required</div>
+
+    <button class="add_form__button_cansel" (click)="this.location.back();">Cansel</button>
+    <button class="add_form__button_add" (click)="Submit_add_form()">Add</button>
+  </form>
+</div>
+</div>
