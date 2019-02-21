@@ -46,6 +46,7 @@ export class AddArticleComponent implements OnInit {
         if (this.Is_controle_invalid_full(key)) {
           return 0;
         }
+
       }
     }
     const newArticle = new Article(
