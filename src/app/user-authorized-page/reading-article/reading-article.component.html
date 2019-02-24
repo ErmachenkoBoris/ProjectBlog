@@ -3,4 +3,17 @@
     X</button></div>
 
   <div class="article_content">{{this.articleService.article_read.article}}</div>
+  <div class="article__comment" *ngIf="this.access_comment(this.articleService.article_read)">
+    <div class="comment__header">Comments</div>
+    <div class="comment__item" *ngFor="let comment of this.commentService.comments">
+      <p class="item__author">{{comment.author}}:</p>
+      <p class="item__text">{{comment.text}}</p>
+    </div>
+    <div>you:</div>
+    <textarea type="text" class="comment__write" placeholder="your comment" [(ngModel)]="this.comment_text" ></textarea>
+    <div>
+    <button class="comment__button" (click)="this.add_comment()">comment</button>
+    </div>
+  </div>
 </div>
+

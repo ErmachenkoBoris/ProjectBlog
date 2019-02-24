@@ -2,7 +2,7 @@ import {Component, DoCheck, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {User, UsersService} from '../../users.service';
+import {UsersService} from '../../users.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -10,18 +10,15 @@ import {Router} from '@angular/router';
   templateUrl: './autorization-form.component.html',
   styleUrls: ['./autorization-form.component.less']
 })
-export class AutorizationFormComponent implements OnInit, DoCheck {
+export class AutorizationFormComponent implements OnInit {
 
   authorization_form: FormGroup;
   constructor(private fb: FormBuilder, private usesrService: UsersService, private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.InitForm();
   }
-  ngDoCheck(): void {
-  }
-
-  InitForm() {
+  InitForm(): void {
     this.authorization_form = this.fb.group({
       login : ['', [Validators.required, Validators.pattern(/^[A-z0-9]+$/u)], [ (control: AbstractControl):
         Observable<ValidationErrors | null> =>
@@ -38,11 +35,9 @@ export class AutorizationFormComponent implements OnInit, DoCheck {
   }
 
   public Login_and_password_validator(control: AbstractControl): Observable<ValidationErrors | null> {
-    console.log(this.authorization_form.value.login, control.value);
     return this.usesrService.Search_user_by_login_and_password(this.authorization_form.value.login, control.value).pipe(map(response => {
       if (response) {
         if (response.length !== 1) {
-          console.log(response);
           return {Incorrect_data: 'login or password incorret'};
         } else {
           if (this.authorization_form.controls['login'].invalid) {
@@ -59,11 +54,9 @@ export class AutorizationFormComponent implements OnInit, DoCheck {
     }));
   }
   public Password_and_login_validator(control: AbstractControl): Observable<ValidationErrors | null> {
-    console.log(this.authorization_form.value.password, control.value);
     return this.usesrService.Search_user_by_login_and_password(control.value, this.authorization_form.value.password).pipe( map(
       response => {
       if (response) {
-        console.log(response);
         if (response.length !== 1) {
           return {Incorrect_data: 'login or password incorret'};
         } else {
@@ -83,8 +76,6 @@ export class AutorizationFormComponent implements OnInit, DoCheck {
   public Login_validator = (control: AbstractControl): Observable<ValidationErrors | null> => {
     return this.usesrService.Search_login(control.value).pipe(map(response => {
       if (response) {
-        console.log(response);
-        console.log(111);
         if (response.length !== 1) {
           return null;
         } else {
@@ -95,7 +86,7 @@ export class AutorizationFormComponent implements OnInit, DoCheck {
       }
     }));
   }
-  Check_all_validators() {
+  Check_all_validators(): number {
     const controls = this.authorization_form.controls;
     for (const cont in controls) {
       if (this.Is_controle_invalid_full(cont)) {
@@ -113,13 +104,16 @@ export class AutorizationFormComponent implements OnInit, DoCheck {
     const controls = this.authorization_form.controls;
     for (const key in controls) {
       if (this.Is_controle_invalid(key)) {
-        console.log(111);
         return null;
       }
     }
-    this.router.navigate(['/user', this.authorization_form.value.login]);
+    if (this.usesrService.admin === 1) {
+      this.router.navigate(['/admin', this.authorization_form.value.login]);
+    } else {
+      this.router.navigate(['/user', this.authorization_form.value.login]);
+    }
     return 1;
 
-  }, 3000);
+  }, 2000);
 }
 }

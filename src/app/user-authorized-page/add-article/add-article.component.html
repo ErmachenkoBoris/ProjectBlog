@@ -26,6 +26,13 @@
     <div class="error_message" *ngIf="this.add_form.get('text').getError('required') && this.add_form.controls['text'].touched">
       field is required</div>
 
+    <div>Scope</div>
+    <div>
+    <input #all type="checkbox" checked="checked">for all
+    </div>
+    <div *ngIf="!all.checked">
+      <input type="checkbox" checked="checked">only for me
+    </div>
     <button class="add_form__button_cansel" (click)="this.location.back();">Cansel</button>
     <button class="add_form__button_add" (click)="Submit_add_form()">Add</button>
   </form>

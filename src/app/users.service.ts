@@ -1,7 +1,23 @@
-import {DoCheck, Injectable} from '@angular/core';
+import {DoCheck, Injectable, OnInit} from '@angular/core';
 import Backendless from 'backendless';
 import {Observable} from 'rxjs';
 import {ValidationErrors} from '@angular/forms';
+import {Location} from '@angular/common';
+
+class Res {
+  admin: 0;
+  created: 0;
+  email: '';
+  id: 0;
+  login: '';
+  name: '';
+  objectId: '';
+  ownerId: null;
+  password: '';
+  surname: '';
+  updated: 0;
+  ___class: '';
+}
 
 export class User {
   public admin: number;
@@ -28,13 +44,16 @@ const UsersStore = Backendless.Data.of('user_data');
   providedIn: 'root'
 })
 export class UsersService {
-
+  public location: Location;
+  public users_count = 0;
+  public admin = 0;
   public users: User[] = [];
   public email_found = 0;
-  loadAll() {
-    UsersStore.find<User>().then((users: User[]) => {
+  Load_All_users() {
+   const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setSortBy( ['id'] );
+    UsersStore.find<User>(queryBuilder).then((users: User[]) => {
       this.users = users;
-      console.log(this.users);
     });
   }
   Search_email(email: string): Observable<ValidationErrors> {
@@ -42,7 +61,6 @@ export class UsersService {
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(function( foundEmail ) {
-        console.log(foundEmail);
           if (foundEmail.length !== 0) {
             observer.next({
               userExist: 'user exist'
@@ -62,10 +80,13 @@ export class UsersService {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     return new Observable<ValidationErrors | null>(observer => {
-      Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(function( foundLogins ) {
-        console.log(foundLogins);
+      Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(( foundLogins: User[] ) => {
           if (foundLogins.length !== 0) {
-            observer.next({
+            console.log(foundLogins[0].admin);
+            this.admin = foundLogins[0].admin;
+            console.log(this.admin);
+            observer.next(
+              {
               loginExist: 'login exist'
             });
             observer.complete();
@@ -79,6 +100,7 @@ export class UsersService {
       });
     });
   }
+
   Search_user_by_login_and_password(login: string, password: string): Observable<ValidationErrors> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
@@ -91,6 +113,7 @@ export class UsersService {
               });
               observer.complete();
             } else {
+              localStorage.setItem('currentUser', JSON.stringify({ login: foundLogins[0].login, email: foundLogins[0].email}));
               observer.next(null);
             }
           } else {
@@ -110,7 +133,66 @@ export class UsersService {
       this.users.push(savedUser);
     });
   }
-  Get_users_count(): number {
-    return this.users.length;
+  Get_users_count() {
+    this.Load_count_names();
+  }
+  Load_count_names (): any {
+    Backendless.Data.of( 'user_data' ).findLast()
+      .then( ( lastObject: User ) => {
+        this.users_count = lastObject.id;
+      })
+      .catch( function( error ) {
+        // an error has occurred, the error code can be retrieved with fault.statusCode
+      });
+
+  }
+  Delete_user(login: string) {
+    const whereClause = `login = '${login}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+
+    Backendless.Data.of( 'user_data' ).find( queryBuilder )
+      .then( ( foundUser: Res[] ) => {
+        Backendless.Data.of('user_data').remove(foundUser[0])
+          .then(() => {
+            this.Delete_user_in_array(foundUser[0].login);
+            console.log('removed OK');
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+      .catch( function( fault ) {
+      });
+
+  }
+  Delete_user_in_array(login: string) {
+    let k = 0 ;
+    const usersTmp: User[] = [];
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].login !== login) {
+        usersTmp[k] = this.users[i];
+      }
+      if ( (i + 1) !== this.users.length) {
+        k++;
+      }
+    }
+    this.users = [];
+    for (let i = 0; i < usersTmp.length; i++) {
+      this.users[i] = usersTmp[i];
+    }
+  }
+  Send_emails(subject: string, text: string, recipients: string[]) {
+    const bodyParts = new Backendless.Bodyparts();
+    bodyParts.textmessage = text;
+    bodyParts.htmlmessage = text;
+    Backendless.Messaging.sendEmail( subject,
+      bodyParts, recipients)
+      .then( function( response ) {
+        console.log( 'message has been sent' );
+      })
+      .catch( function( error ) {
+        console.log( 'error' + error.message );
+      });
+
   }
 }

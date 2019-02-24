@@ -24,7 +24,8 @@ export class RegisterFormComponent implements OnInit {
 
   ngOnInit() {
     this.InitForm();
-    this.personsService.loadAll();
+    // this.personsService.load_All_users();
+    this.personsService.Get_users_count();
   }
 
   InitForm() {
@@ -91,7 +92,7 @@ export class RegisterFormComponent implements OnInit {
       return null;
     }
   }
-  Check_password_validator = (control: FormControl) => {
+  Check_password_validator = (control: FormControl): any => {
     if (this.register_form) {
       const value = control.value;
       const value_password = this.register_form.value.password;
@@ -102,7 +103,6 @@ export class RegisterFormComponent implements OnInit {
       return null;
     }
   }
-
   Get_password_error(control_name: string): string {
     if (this.register_form.get(control_name).getError('invalidPassword') && this.register_form.get(control_name).touched) {
       return this.register_form.get(control_name).getError('invalidPassword');
@@ -110,7 +110,6 @@ export class RegisterFormComponent implements OnInit {
       return null;
     }
   }
-
   public Email_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.personsService.Search_email(control.value).pipe(map(response => {
       if (response) {
@@ -124,7 +123,6 @@ export class RegisterFormComponent implements OnInit {
       }
     }));
   }
-
   public Login_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.personsService.Search_login(control.value).pipe(map(response => {
       if (response) {
@@ -138,17 +136,15 @@ export class RegisterFormComponent implements OnInit {
       }
     }));
   }
-
   Submit_form_register(): any {
     window.setTimeout(() => {
       const controls = this.register_form.controls;
       for (const key in controls) {
         if (this.Is_controle_invalid(key)) {
-          console.log(111);
           return null;
         }
       }
-      const count = this.personsService.Get_users_count() + 1;
+      const count = this.personsService.users_count + 1;
       const user = new User(
         this.register_form.value.admin,
         this.register_form.value.email,
@@ -157,16 +153,14 @@ export class RegisterFormComponent implements OnInit {
         this.register_form.value.name,
         this.register_form.value.password,
         this.register_form.value.surname);
-      console.log(count);
       const error = this.personsService.Add_user(user);
-
+      localStorage.setItem('currentUser', JSON.stringify({ login: this.register_form.value.login, email: this.register_form.value.email}));
       this.router.navigate(['/user', this.register_form.value.login]) ;
       return error;
 
     }, 3000);
   }
-
-  Check_all_validators() {
+  Check_all_validators(): number {
       const controls = this.register_form.controls;
       for (const cont in controls) {
         if (this.Is_controle_invalid_full(cont)) {

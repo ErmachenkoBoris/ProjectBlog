@@ -16,11 +16,17 @@ export class AddArticleComponent implements OnInit {
   topic: string;
   add_form: FormGroup;
   suggest = 0;
+  currentUser: any;
+  login = '';
   constructor(public articleService: ArticleService, private activatedRoute: ActivatedRoute,
               public router: Router, public fb: FormBuilder, private location: Location) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.InitForm();
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (this.currentUser) {
+      this.login = this.currentUser.login;
+    }
     this.activatedRoute.params.subscribe((params: Params) => {
       this.topic = params['nameTopic'];
       if (this.topic === '') {
@@ -28,7 +34,7 @@ export class AddArticleComponent implements OnInit {
       }
     });
   }
-  InitForm() {
+  InitForm(): void {
     this.add_form = this.fb.group({
       name_topic: ['', [Validators.required, Validators.pattern(/^[A-z0-9]+$/u)]],
       name_article: ['', [Validators.required, Validators.pattern(/^[A-z0-9]+$/u)],
@@ -51,7 +57,7 @@ export class AddArticleComponent implements OnInit {
     }
     const newArticle = new Article(
       this.add_form.value.text,
-      'NoAdmin',
+      this.login,
       this.articleService.names_count + 1,
       this.add_form.value.name_topic || this.topic,
       this.add_form.value.name_article
@@ -62,25 +68,19 @@ export class AddArticleComponent implements OnInit {
     }
     const promiseArticle = this.articleService.Add_Article(newArticle);
     const newArticle_name = new ArticleName(
+      this.login,
       conf,
       this.articleService.names_count + 1,
       this.add_form.value.name_article,
       this.add_form.value.name_topic || this.topic
     );
     const promiseArticle_name = this.articleService.Add_article_name(newArticle_name);
-    /*if (this.suggest === 1) {
-      const newTopic = new ArticleTopic(
-        this.articleService.topics.length + 1,
-        this.add_form.value.name_topic
-      );
-      this.articleService.Add_article_topic(newTopic);
-    }*/
     if (promiseArticle && promiseArticle_name) {
       this.location.back();
     }
     return 1;
   }
-  Close_add_form() {
+  Close_add_form(): void {
     this.location.back();
   }
   Is_controle_invalid(name_controle: string): boolean {

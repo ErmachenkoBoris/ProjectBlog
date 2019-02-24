@@ -3,6 +3,21 @@ import Backendless from 'backendless';
 import {Observable} from 'rxjs';
 import {ValidationErrors} from '@angular/forms';
 import {User} from './users.service';
+import {delay} from 'q';
+
+class Res {
+  access: '';
+  article: '';
+  author: '';
+  created: 0;
+  id: 0;
+  name: '';
+  objectId: '';
+  ownerId: null;
+  topic: '';
+  updated: null;
+  ___class: '';
+}
 
 export class Article {
   public name: string;
@@ -10,12 +25,17 @@ export class Article {
   public author: string;
   public id: number;
   public topic: string;
-  constructor(article: string, author: string, id: number, topic: string, name: string) {
+  public access_read: string;
+  public access_comment: string;
+  constructor(article: string, author: string, id: number, topic: string, name: string, access_read: string = 'all',
+              access_comment: string = 'all') {
     this.article = article;
     this.author = author;
     this.id = id;
     this.topic = topic;
     this.name = name;
+    this.access_read = access_read;
+    this.access_comment = access_comment;
   }
 }
 
@@ -29,20 +49,29 @@ export class ArticleTopic {
 }
 
 export class ArticleName {
+  public author: string;
   public confirmation: number;
   public id: number;
   public name: string;
   public topic: string;
+  public access_read: string;
+  public access_comment: string;
   constructor(
+    author: string,
     confirmation: number,
-  id: number,
-  name: string,
-  topic: string
+    id: number,
+    name: string,
+    topic: string,
+    access_read: string = 'all',
+    access_comment: string = 'all'
   ) {
+    this.author = author;
   this.confirmation = confirmation;
   this.id = id;
   this.name = name;
   this.topic = topic;
+  this.access_read = access_read;
+  this.access_comment = access_comment;
   }
 }
 
@@ -54,6 +83,8 @@ const TopicsStore = Backendless.Data.of('article_topic');
   providedIn: 'root'
 })
 export class ArticleService {
+  result_data: any = new Res();
+  result_name: any = new Res();
   public names_count = 0;
   public articles: Article[] = [];
   public articles_choosen: Article[] = [];
@@ -62,19 +93,34 @@ export class ArticleService {
   public topics: ArticleTopic[] = [];
   public article_names: ArticleName[] = [];
   public email_found = 0;
+  article_read_name: ArticleName;
 constructor() {
     this.Load_count_names();
-    console.log(1);
+    this.Load_all_names_topic();
   }
 
   Load_all_articles() {
-    ArticlesStore.find<Article>().then((articles: Article[]) => {
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    ArticlesStore.find<Article>(queryBuilder).then((articles: Article[]) => {
       this.articles = articles;
+      // console.log(articles);
+    });
+  }
+  Load_all_names_topic() {
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
+      this.article_names = articleName;
+      // console.log(articleName);
     });
   }
   Load_all_topics() {
-    TopicsStore.find<ArticleTopic>().then((topics: ArticleTopic[]) => {
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    TopicsStore.find<ArticleTopic>(queryBuilder).then((topics: ArticleTopic[]) => {
       this.topics = topics;
+      console.log(topics);
     });
   }
   Search_email(email: string): Observable<ValidationErrors> {
@@ -122,10 +168,8 @@ constructor() {
     Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticles: Article[] ) => {
         this.articles_choosen = foundArticles;
-        console.log(this.articles_choosen);
       })
       .catch( function( fault ) {
-        console.log(fault);
         return null;
       });
 
@@ -136,40 +180,46 @@ constructor() {
     Backendless.Data.of( 'article_name' ).find( queryBuilder )
       .then( ( foundArticles: ArticleName[] ) => {
         this.articles_choosen_names = foundArticles;
-        console.log(this.articles_choosen_names);
       })
       .catch( function( fault ) {
-        console.log(fault);
         return null;
       });
     this.Load_count_names ();
   }
 
   Load_count_names (): any {
-    const dataQueryBuilder = Backendless.DataQueryBuilder.create().setProperties( 'Count(objectId)');
-    Backendless.Data.of( 'article_name' ).find( dataQueryBuilder )
-      .then( ( result: {
-        'count': number,
-        '___class': 'any',
-      } []) => {
-          this.names_count = result[0].count;
-          console.log(this.names_count);
-      } );
+    Backendless.Data.of( 'article_name' ).findLast()
+      .then( ( lastObject: User ) => {
+        this.names_count = lastObject.id;
+      })
+      .catch( function( error ) {
+        // an error has occurred, the error code can be retrieved with fault.statusCode
+      });
 
   }
 
-  Load_article_for_read(name_Article: string): any {
+
+  Load_article_for_read(name_Article: string): Promise<void> {
     const whereClause = `name = '${name_Article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
-    Backendless.Data.of( 'article_data' ).find( queryBuilder )
+    return Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticles: Article[] ) => {
         this.article_read = foundArticles[0];
       })
       .catch( function( fault ) {
-        console.log(fault);
         return null;
       });
-
+  }
+  Load_article_Name_for_read(name_Article: string): Promise<void> {
+    const whereClause = `name = '${name_Article}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    return Backendless.Data.of( 'article_name' ).find( queryBuilder )
+      .then( ( foundArticles: ArticleName[] ) => {
+        this.article_read_name = foundArticles[0];
+      })
+      .catch( function( fault ) {
+        return null;
+      });
   }
   Add_Article(article: Article): Promise<void> {
     this.names_count++;
@@ -183,17 +233,108 @@ constructor() {
     });
   }
   Add_article_name(name: ArticleName): Promise<void> {
-  console.log(111);
     return Backendless.Data.of( 'article_name' ).save<ArticleName>(name).then((savedArticleName: ArticleName) => {
       this.article_names.push(savedArticleName);
+      this.Load_all_names_topic();
     });
   }
- /* Add_user(user: User): Promise<void> {
-    return UsersStore.save<User>(user).then((savedUser: User) => {
-      this.users.push(savedUser);
-    });
+  Delete_article(article: string) {
+    const whereClause = `name = '${article}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+
+    Backendless.Data.of( 'article_data' ).find( queryBuilder )
+      .then( ( foundArticle: Res[] ) => {
+        this.result_data = foundArticle[0].objectId;
+        Backendless.Data.of('article_data').remove(foundArticle[0])
+          .then(function (timestamp) {
+           // this.Load_all_names_topic();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+      .catch( function( fault ) {
+      });
+    Backendless.Data.of( 'article_name').find( queryBuilder )
+      .then( ( foundArticles: Res[] ) => {
+        this.result_name = foundArticles[0].objectId;
+        Backendless.Data.of('article_name').remove(foundArticles[0])
+          .then((timestamp) => {
+            this.Load_all_names_topic();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+      .catch( function( fault ) {
+      });
   }
-  Get_users_count(): number {
-    return this.users.length;
-  }*/
+  Delete_article_name(article: string): Promise<void> {
+    const whereClause = `name = '${article}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    return Backendless.Data.of( 'article_name').find( queryBuilder )
+      .then( ( foundArticles: Res[] ) => {
+        this.result_name = foundArticles[0].objectId;
+        Backendless.Data.of('article_name').remove(foundArticles[0])
+          .then((timestamp) => {
+            this.Load_all_names_topic();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+      .catch( function( fault ) {
+      });
+  }
+  Delete_topic(topic: string): Promise<void> {
+    const whereClause = `topic = '${topic}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    return Backendless.Data.of( 'article_topic').find( queryBuilder )
+      .then( ( foundArticles: Res[] ) => {
+        this.result_name = foundArticles[0].objectId;
+        Backendless.Data.of('article_topic').remove(foundArticles[0])
+          .then((timestamp) => {
+            console.log('delete') ;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+      .catch( function( fault ) {
+      });
+  }
+  Delete_all_article_for_topic(topic: string) {
+    const whereClause = `topic = '${topic}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+
+    Backendless.Data.of( 'article_data' ).find( queryBuilder )
+      .then( ( foundArticle: Res[] ) => {
+        for (let i = 0; i < foundArticle.length; i++) {
+          Backendless.Data.of('article_data').remove(foundArticle[i])
+            .then(function (timestamp) {
+              // this.Load_all_names_topic();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      })
+      .catch( function( fault ) {
+      });
+    Backendless.Data.of( 'article_name').find( queryBuilder )
+      .then( ( foundArticles: Res[] ) => {
+        for (let i = 0; i < foundArticles.length; i++) {
+          Backendless.Data.of('article_name').remove(foundArticles[i])
+            .then((timestamp) => {
+              this.Load_all_names_topic();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      })
+      .catch( function( fault ) {
+      });
+  }
 }
+

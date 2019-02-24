@@ -7,7 +7,7 @@
     && this.authorization_form.controls['login'].touched &&
     this.authorization_form.controls['password'].touched">password or login Incorrect</div>
 
-  <div class="form-authorization__item"><input type="text" class="item" formControlName="password" placeholder="Password"></div>
+  <div class="form-authorization__item"><input type="password" class="item" formControlName="password" placeholder="Password"></div>
   <div class="error_message" *ngIf="(this.authorization_form.get('password').getError('Incorrect_data'))
   &&this.authorization_form.controls['password'].touched && this.authorization_form.controls['login'].touched">password or login Incorrect</div>
   <button *ngIf="Check_all_validators()" type="submit" class="form_add__submit_button" >Enter</button>

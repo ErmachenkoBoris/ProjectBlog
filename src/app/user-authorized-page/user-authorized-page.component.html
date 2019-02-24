@@ -11,6 +11,7 @@
            (mouseleave)="change_back_info(10)"
            (click)="choose_articles(topic.topic);Set_name('');select_button(i)" class="menu__topic">{{topic.topic}}</div>
     </div>
+    <div (click)="Set_name('');choose_articles('');" class="menu__topic">MAIN</div>
     <div  (mouseenter)="change_back_info(11);" [style.background] ="this.background_menu_array[i]"
           (mouseleave)="change_back_info(10)"
           (click)="select_button(i)" class="menu__topic" style="color: green;"
@@ -28,8 +29,8 @@
     </p>
     </span>
     <span *ngSwitchDefault>
-      <div *ngFor="let name of articleService.articles_choosen_names;let i = index;" class="user_age__names_article">
-            <div (click)="Set_name(name.name)" class="user_age__names_article_item"
+      <div *ngFor="let name of article_Name;let i = index;" class="user_age__names_article">
+            <div (click)="Set_name( name.name )" class="user_age__names_article_item"
                  [routerLink]="[{ outlets: { article_read: [name.name] } }]">{{i}}. {{name.name}}</div>
     </div>
       <div class="user_age__button_add_article" [routerLink]="[{ outlets: { article_add: [articleService.articles_choosen_names[0].topic] } }]">

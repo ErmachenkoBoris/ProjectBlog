@@ -13,7 +13,7 @@ export class AppMainPageComponent implements OnInit {
   ];
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   Change_form(N: number): void {

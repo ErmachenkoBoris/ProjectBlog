@@ -1,11 +1,16 @@
+.radius(@radius:6px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
 .article{
   position: absolute;
   top: 10vh;
 }
 
 .article_content{
-  font-size: 3vh;
-  background: #698ac2;
+  font-size: 2vh;
+  background: #525d9f;
   color: white;
   padding-top: 7vh;
   padding-left: 10vw;
@@ -33,4 +38,41 @@
 }
 .close_article_bottom:hover{
   background: #ffb396;
+}
+.article__comment{
+  background: #a5cee8;
+  padding-bottom: 7vh;
+  padding: 3vw;
+}
+.comment__header{
+text-align: center;
+  font-size: 5vh;
+  color: white;
+}
+.comment__write{
+width: 50vw;
+  height: 10vh;
+}
+.comment__item{
+  width: 30vw;
+}
+.item__author{
+margin: 0;
+  padding: 0;
+}
+.item__text{
+  padding: 0.5vh;
+  background: #d6d6d6;
+  border: #989896 1px solid;
+  margin-bottom: 2vh;
+}
+.comment__button{
+height: 4vh;
+  .radius(2vh);
+  background: #551bd6;
+  color: white;
+}
+p{
+  margin: 0;
+  padding: 0;
 }
