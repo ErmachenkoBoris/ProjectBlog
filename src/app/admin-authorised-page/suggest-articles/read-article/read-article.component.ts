@@ -1,24 +1,22 @@
 import {Component, DoCheck, Input, OnInit} from '@angular/core';
-import {Article, ArticleName} from '../../article.service';
-import {ArticleService} from '../../article.service';
+import {Article} from '../../../article.service';
+import {ArticleService} from '../../../article.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Router} from '@angular/router';
 import { Location } from '@angular/common';
-import {Comment} from '../../comment.service';
-import {CommentService} from '../../comment.service';
+import {Comment} from '../../../comment.service';
+import {CommentService} from '../../../comment.service';
 
 @Component({
-  selector: 'app-reading-article',
-  templateUrl: './reading-article.component.html',
-  styleUrls: ['./reading-article.component.less']
+  selector: 'app-read-article-admin',
+  templateUrl: './read-article.component.html',
+  styleUrls: ['./read-article.component.less']
 })
-export class ReadingArticleComponent implements OnInit, DoCheck {
+export class ReadArticleComponent implements OnInit, DoCheck {
   @Input() article_name = '';
   login: string;
   comment_text = '';
   article_old: string;
-  article_names: ArticleName[];
-  access_write: number;
   public article: Article = new Article('', '', -1, '', '');
 
   constructor(public articleService: ArticleService, private activatedRoute: ActivatedRoute,
@@ -27,15 +25,12 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser) {
-      this.access_write = currentUser.access_write;
-    }
     this.activatedRoute.params.subscribe((params: Params) => {
       this.article_name = params['nameArticle'];
       this.login = params['login'];
     });
     this.article_old = this.article_name;
+
     if (this.article_name) {
       this.articleService.Load_article_for_read(this.article_name);
       if (this.articleService.article_read) {
@@ -57,8 +52,8 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
     }
   }
   Close_article(): void {
-      this.location.back();
-      // this.router.navigate([{ outlets: { article_read: null }} ]);
+    this.location.back();
+    // this.router.navigate([{ outlets: { article_read: null }} ]);
 
   }
   add_comment(): null {
@@ -74,17 +69,8 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
     this.comment_text = '';
     return null;
   }
-  access_comment(article: Article): number {
-    if (article.access_comment === 'all') {
-      return 1;
-    } else {
-      const tmpEmails = article.access_comment.split(' ');
-      for (let i = 0 ; i < tmpEmails.length; i++) {
-        if (tmpEmails[i] === article.access_comment) {
-          return 1;
-        }
-      }
-    }
-    return 0;
+  Delete_article(): void {
+    this.articleService.Delete_article(this.article_name);
+    this.Close_article();
   }
 }

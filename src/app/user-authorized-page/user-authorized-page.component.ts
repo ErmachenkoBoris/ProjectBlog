@@ -19,6 +19,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   background_menu_array: string[] = [];
   loginUser: string;
   article_Name: ArticleName[] = [];
+  access_suggest: number;
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
        this.loginUser = params['login'];
@@ -27,6 +28,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     let login = '';
     if (currentUser) {
       login = currentUser.login;
+      this.access_suggest = currentUser.access_suggest;
     }
     if (!login || login !== this.loginUser || !this.loginUser) {
       console.log(login);

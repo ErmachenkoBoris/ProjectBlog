@@ -1,0 +1,35 @@
+<div class="user_control">
+  <button class="table__close_button" (click)="Close_user_control()">close</button>
+  <button class="table__add_button" [routerLink]="[{ outlets: { add_user: ['add'] } }]" >add user</button>
+  <router-outlet  name="add_user"></router-outlet>
+
+  <table class="user_control__table">
+    <tr class="table__row_main">
+      <td class="table__column_item">id</td>
+      <td class="table__column_item" >name</td>
+      <td class="table__column_item">surname</td>
+      <td class="table__column_item">parol</td>
+      <td class="table__column_item">email</td>
+      <td class="table__column_item">password</td>
+      <td class="table__column_item">admin</td>
+      <td class="table__column_item"></td>
+
+    </tr>
+    <tr *ngFor="let user of this.userService.users; let i = index" class="table__row">
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.id}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.name}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.surname}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.login}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.email}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.password}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{user.admin}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">
+        <button *ngIf="get_bool(user.access_suggest)"class = "table__delete_button"(click)="this.Block_suggest(user.login)">block suggest article</button>
+        <button *ngIf="get_un_bool(user.access_suggest)" class = "table__unblock_button"(click)="this.UnBlock_suggest(user.login)">UNblock suggest article</button>
+        <button *ngIf="get_bool(user.access_write)" class = "table__delete_button"(click)="this.Block_write(user.login)">block wtite comment</button>
+        <button *ngIf="get_un_bool(user.access_write)" class = "table__unblock_button"(click)="this.UnBlock_write(user.login)">UNblock wtite comment</button>
+        <button class = "table__delete_button"(click)="this.Delete_user(user.login)">delete</button>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,55 @@
+<div class="admin_page">
+  <div class="admin_page__header">
+    <div class="header_name-blog">Front-Man ADMIN PANEL</div>
+  </div>
+
+  <div class="admin_page__construct">
+    <div class="admin_page__menu_container">
+      <div class="admin_page__menu">
+        <div *ngFor="let topic of this.articleService.topics;let i = index;">
+          <div  (mouseenter)="change_back_info(i);" [style.background] ="this.background_menu_array[i]"
+                (mouseleave)="change_back_info(10)"
+                (click)="choose_articles(topic.topic);Set_name('');select_button(i)" class="menu__topic">{{topic.topic}}</div>
+        </div>
+        <div (click)="Set_name('');choose_articles('');" class="menu__topic">MAIN</div>
+        <div class="menu__topic" style="color: green;" [routerLink]="[{ outlets: { article_add_admin: [''] } }]"> + Suggest</div>
+      </div>
+    </div>
+    <div class="admin_page__context_container" [ngSwitch]="articleService.articles_choosen_names.length">
+    <span *ngSwitchCase="0">
+    <p  [style.background]="back_color" class = "admin_page__info" >
+      Hello, {{this.currentUser.login}}<br>
+    </p>
+      <div class="admin_page__menu_button">
+        <button class="context_container__menu_bottom" [routerLink]="[{
+        outlets: { control_user: ['control'],send_email: null,suggest_article:null,article_control:null} }]">Users</button>
+
+        <button class="context_container__menu_bottom" [routerLink]="[{
+        outlets: { send_email: ['send'],suggest_article:null,control_user: null,article_control:null } }]" >send email</button>
+
+        <button class="context_container__menu_bottom" [routerLink]="[{
+        outlets: { article_control: ['article_control'],send_email:null,control_user: null, suggest_article:null } }]" >Articles & Topics</button>
+
+        <button class="context_container__menu_bottom" [routerLink]="[{
+        outlets: { suggest_article: ['suggest'],send_email:null,control_user: null,article_control:null } }]" >suggest topics</button>
+      </div>
+    </span>
+      <span *ngSwitchDefault>
+      <div *ngFor="let name of articleService.articles_choosen_names;let i = index;" class="admin_age__names_article">
+            <div (click)="Set_name(name.name)" class="admin_age__names_article_item"
+                 [routerLink]="[{ outlets: { article_read_admin: [name.name] } }]">{{i}}. {{name.name}}</div>
+    </div>
+      <div class="admin_age__button_add_article" [routerLink]="[{ outlets: { article_add_admin: [articleService.articles_choosen_names[0].topic] } }]">
+        + write your article</div>
+    </span>
+      <!--<app-reading-article [article_name]="name_for_read" *ngIf="name_for_read"></app-reading-article>-->
+      <router-outlet name="article_add_admin"></router-outlet>
+      <router-outlet name="article_read_admin"></router-outlet>
+      <router-outlet name="control_user"></router-outlet>
+      <router-outlet name="send_email"></router-outlet>
+      <router-outlet name="suggest_article"></router-outlet>
+      <router-outlet name="article_control"></router-outlet>
+    </div>
+  </div>
+
+</div>

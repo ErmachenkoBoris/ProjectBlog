@@ -12,7 +12,8 @@
            (click)="choose_articles(topic.topic);Set_name('');select_button(i)" class="menu__topic">{{topic.topic}}</div>
     </div>
     <div (click)="Set_name('');choose_articles('');" class="menu__topic">MAIN</div>
-    <div  (mouseenter)="change_back_info(11);" [style.background] ="this.background_menu_array[i]"
+    <div  *ngIf="this.access_suggest==='1'"
+          (mouseenter)="change_back_info(11);" [style.background] ="this.background_menu_array[i]"
           (mouseleave)="change_back_info(10)"
           (click)="select_button(i)" class="menu__topic" style="color: green;"
           [routerLink]="[{ outlets: { article_add: [''] } }]"> + Suggest</div>

@@ -1,0 +1,21 @@
+<div class="send_emails">
+  <button class="send_emails__close_item" (click)="this.location.back()">close</button>
+  <div class="send_emails__header">Write email:</div>
+  <div class="send_emails__subject">
+    Write subject:
+  </div>
+    <input type ="text" class="send_emails__subject_item"[(ngModel)]="subject" placeholder="subject">
+
+  <div class="send_emails__text">
+    Write text:</div>
+  <textarea class="send_emails__text_item" [(ngModel)]="text"></textarea>
+
+  <div class="send_emails__options">
+    Send NOT to all
+  <input #check type="checkbox"  value="checked" (click)="this.checkBox()" id="one">
+  </div>
+  <div *ngIf="checkBox(check)">
+      <input type="text" class="send_emails__options_item" placeholder="write emails" [(ngModel)]="email_target">
+  </div>
+  <button class="send_emails__button_send" (click)="send()">send</button>
+</div>

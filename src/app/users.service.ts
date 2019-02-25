@@ -3,6 +3,8 @@ import Backendless from 'backendless';
 import {Observable} from 'rxjs';
 import {ValidationErrors} from '@angular/forms';
 import {Location} from '@angular/common';
+import {Article} from './article.service';
+import {promise} from 'selenium-webdriver';
 
 class Res {
   admin: 0;
@@ -20,6 +22,8 @@ class Res {
 }
 
 export class User {
+  public access_suggest: string;
+  public access_write: string;
   public admin: number;
   public email: string;
   public id: number;
@@ -27,7 +31,9 @@ export class User {
   public name: string;
   public password: string;
   public surname: string;
-  constructor(admin: number, email: string, id: number, login: string, name: string, password: string, surname: string) {
+  public user_for_access: User;
+  constructor(admin: number, email: string, id: number, login: string, name: string, password: string, surname: string,
+              access_write: string = '1', access_suggest: string = '1') {
   this.admin = admin;
   this.email = email;
   this.id = id;
@@ -35,6 +41,8 @@ export class User {
   this.name = name;
   this.password = password;
   this.surname = surname;
+  this.access_suggest = access_suggest;
+  this.access_write = access_write;
   }
 }
 
@@ -49,11 +57,13 @@ export class UsersService {
   public admin = 0;
   public users: User[] = [];
   public email_found = 0;
+  public user_for_access: User;
   Load_All_users() {
    const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setSortBy( ['id'] );
     UsersStore.find<User>(queryBuilder).then((users: User[]) => {
       this.users = users;
+      console.log(users);
     });
   }
   Search_email(email: string): Observable<ValidationErrors> {
@@ -113,7 +123,8 @@ export class UsersService {
               });
               observer.complete();
             } else {
-              localStorage.setItem('currentUser', JSON.stringify({ login: foundLogins[0].login, email: foundLogins[0].email}));
+              localStorage.setItem('currentUser', JSON.stringify({ login: foundLogins[0].login, email: foundLogins[0].email,
+              access_write: foundLogins[0].access_write, access_suggest: foundLogins[0].access_suggest}));
               observer.next(null);
             }
           } else {
@@ -129,8 +140,17 @@ export class UsersService {
     });
   }
   Add_user(user: User): Promise<void> {
-    return UsersStore.save<User>(user).then((savedUser: User) => {
+    return Backendless.Data.of('user_data').save<User>(user).then((savedUser: User) => {
       this.users.push(savedUser);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+  Update_user(user: User): Promise<void> {
+    return Backendless.Data.of('user_data').save<User>(user).then((savedUser: User) => {
+      this.update_users(user);
+    }).catch((error) => {
+      console.log(error);
     });
   }
   Get_users_count() {
@@ -146,11 +166,11 @@ export class UsersService {
       });
 
   }
-  Delete_user(login: string) {
+  Delete_user(login: string): Promise<void> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
 
-    Backendless.Data.of( 'user_data' ).find( queryBuilder )
+    return Backendless.Data.of( 'user_data' ).find( queryBuilder )
       .then( ( foundUser: Res[] ) => {
         Backendless.Data.of('user_data').remove(foundUser[0])
           .then(() => {
@@ -194,5 +214,29 @@ export class UsersService {
         console.log( 'error' + error.message );
       });
 
+  }
+  Load_user_by_login(login: string): Promise<void> {
+    const whereClause = `login = '${login}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    return Backendless.Data.of( 'user_data' ).find( queryBuilder )
+      .then( ( foundUsers: User[] ) => {
+        this.user_for_access = foundUsers[0];
+      })
+      .catch( function( fault ) {
+        return null;
+      });
+  }
+  update_users(user: User): number {
+    console.log(user);
+    console.log(1);
+    for ( let i = 0; i < this.users.length; i++) {
+      if (this.users[i].login === user.login) {
+        console.log( this.users[i]);
+        this.users[i] = user;
+        console.log( this.users[i]);
+        return 1;
+      }
+    }
+    return 0;
   }
 }

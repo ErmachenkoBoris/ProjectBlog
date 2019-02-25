@@ -1,0 +1,24 @@
+<div class="suggest_articles">
+  <button (click)="close_suggest()" class="suggest_articles__button_close">close</button> <span class="suggest_articles__header">Suggest Topics with Article:</span>
+  <table class="suggest_articles__table">
+    <tr class="table__row_main">
+      <td class="row__item">ID</td>
+      <td class="row__item">NEW TOPIC</td>
+      <td class="row__item">NEW ARTICLE NAME</td>
+      <td class="row__item">Author</td>
+      <td class="row__item">Options</td>
+    </tr>
+  <tr class="table__row" *ngFor="let suggest_Name of suggest_names; let i = index" [style.background]="get_backround_row(i)">
+    <td class="row__item" >{{suggest_Name.id}}</td>
+    <td class="row__item" >{{suggest_Name.topic}}</td>
+    <td class="row__item">{{suggest_Name.name}}</td>
+    <td class="row__item">{{suggest_Name.author}}</td>
+    <td class="row__item">
+      <button class="table__option_button_delete"(click)="Delete_article(suggest_Name.name);">delete</button>
+      <button class="table__option_button_accept" (click)="Accept_article(suggest_Name.name);">accept</button>
+      <button  class="table__option_button_read" (click)="choose_articles(suggest_Name.name);" [routerLink]="[{ outlets: { read_article: ['read']  } }]">read</button>
+    </td>
+  </tr>
+  </table>
+  <router-outlet name="read_article"></router-outlet>
+</div>

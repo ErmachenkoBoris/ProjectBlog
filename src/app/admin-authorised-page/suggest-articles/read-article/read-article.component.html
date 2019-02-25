@@ -1,9 +1,9 @@
 <div class="article">
   <div class="article_header" >{{this.articleService.article_read.name}}<button (click)="Close_article()" class="close_article_bottom">
-    X</button></div>
+    X</button><button (click)="Delete_article()">Удалить</button></div>
 
   <div class="article_content">{{this.articleService.article_read.article}}</div>
-  <div class="article__comment" *ngIf="this.access_comment(this.articleService.article_read) && this.access_write==='1'">
+  <div class="article__comment">
     <div class="comment__header">Comments</div>
     <div class="comment__item" *ngFor="let comment of this.commentService.comments">
       <p class="item__author">{{comment.author}}:</p>
@@ -12,8 +12,7 @@
     <div>you:</div>
     <textarea type="text" class="comment__write" placeholder="your comment" [(ngModel)]="this.comment_text" ></textarea>
     <div>
-    <button class="comment__button" (click)="this.add_comment()">comment</button>
+      <button class="comment__button" (click)="this.add_comment()">comment</button>
     </div>
   </div>
 </div>
-
