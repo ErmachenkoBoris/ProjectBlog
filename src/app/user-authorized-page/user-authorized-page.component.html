@@ -30,12 +30,14 @@
     </p>
     </span>
     <span *ngSwitchDefault>
+      <div *ngIf="article_Name.length">
       <div *ngFor="let name of article_Name;let i = index;" class="user_age__names_article">
             <div (click)="Set_name( name.name )" class="user_age__names_article_item"
                  [routerLink]="[{ outlets: { article_read: [name.name] } }]">{{i}}. {{name.name}}</div>
     </div>
       <div class="user_age__button_add_article" [routerLink]="[{ outlets: { article_add: [articleService.articles_choosen_names[0].topic] } }]">
         + write your article</div>
+      </div>
     </span>
     <!--<app-reading-article [article_name]="name_for_read" *ngIf="name_for_read"></app-reading-article>-->
     <router-outlet name="article_add"></router-outlet>

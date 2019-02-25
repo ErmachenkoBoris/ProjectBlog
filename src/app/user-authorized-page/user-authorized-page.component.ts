@@ -19,7 +19,11 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   background_menu_array: string[] = [];
   loginUser: string;
   article_Name: ArticleName[] = [];
-  access_suggest: number;
+  access_suggest: string;
+  scope_read_boolean = false;
+  scope_comment_boolean = false;
+  scope_read_boolean__item = false;
+  scope_comment_boolean__item = false;
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
        this.loginUser = params['login'];
@@ -31,7 +35,6 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
       this.access_suggest = currentUser.access_suggest;
     }
     if (!login || login !== this.loginUser || !this.loginUser) {
-      console.log(login);
       this.router.navigate(['']);
     }
     this.articleService.Load_all_topics();
@@ -42,7 +45,6 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
       let k = 0;
       for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
         const flag = this.access_read(this.articleService.articles_choosen_names[i]);
-        console.log(flag);
         if (flag) {
           this.article_Name[k] = this.articleService.articles_choosen_names[i];
           if (this.articleService.articles_choosen_names.length !== i + 1) {
@@ -57,7 +59,6 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
       let k = 0;
       for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
         const flag = this.access_read(this.articleService.articles_choosen_names[i]);
-        console.log(flag);
         if (flag) {
           this.article_Name[k] = this.articleService.articles_choosen_names[i];
           if (this.articleService.articles_choosen_names.length !== i + 1) {
@@ -107,4 +108,16 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     }
     return 0;
 }
+  Change_reading_scope(): void {
+    this.scope_read_boolean = !this.scope_read_boolean;
+  }
+  Change_comment_scope(): void {
+    this.scope_comment_boolean = !this.scope_comment_boolean;
+  }
+  Change_reading_scope__item(): void {
+    this.scope_read_boolean__item = !this.scope_read_boolean__item;
+  }
+  Change_comment_scope__item(): void {
+    this.scope_comment_boolean__item = !this.scope_comment_boolean__item;
+  }
 }

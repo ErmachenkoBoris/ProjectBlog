@@ -47,7 +47,7 @@ export class User {
 }
 
 const UsersStore = Backendless.Data.of('user_data');
-
+const PAGE_SIZE = 50;
 @Injectable({
   providedIn: 'root'
 })
@@ -60,15 +60,15 @@ export class UsersService {
   public user_for_access: User;
   Load_All_users() {
    const queryBuilder = Backendless.DataQueryBuilder.create();
-    queryBuilder.setSortBy( ['id'] );
+    queryBuilder.setSortBy( ['id'] ).setPageSize( PAGE_SIZE ).setOffset( 0 );
     UsersStore.find<User>(queryBuilder).then((users: User[]) => {
       this.users = users;
-      console.log(users);
     });
   }
   Search_email(email: string): Observable<ValidationErrors> {
     const whereClause = `email = '${email}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(function( foundEmail ) {
           if (foundEmail.length !== 0) {
@@ -89,12 +89,11 @@ export class UsersService {
   Search_login(login: string): Observable<ValidationErrors> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(( foundLogins: User[] ) => {
           if (foundLogins.length !== 0) {
-            console.log(foundLogins[0].admin);
             this.admin = foundLogins[0].admin;
-            console.log(this.admin);
             observer.next(
               {
               loginExist: 'login exist'
@@ -114,6 +113,7 @@ export class UsersService {
   Search_user_by_login_and_password(login: string, password: string): Observable<ValidationErrors> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(( foundLogins: User[] ) => {
           if (foundLogins.length !== 0) {
@@ -143,23 +143,24 @@ export class UsersService {
     return Backendless.Data.of('user_data').save<User>(user).then((savedUser: User) => {
       this.users.push(savedUser);
     }).catch((error) => {
-      console.log(error);
     });
   }
   Update_user(user: User): Promise<void> {
     return Backendless.Data.of('user_data').save<User>(user).then((savedUser: User) => {
       this.update_users(user);
     }).catch((error) => {
-      console.log(error);
     });
   }
   Get_users_count() {
     this.Load_count_names();
   }
   Load_count_names (): any {
-    Backendless.Data.of( 'user_data' ).findLast()
-      .then( ( lastObject: User ) => {
-        this.users_count = lastObject.id;
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setSortBy( ['id'] );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    Backendless.Data.of( 'user_data' ).find(queryBuilder)
+      .then( ( lastObject: any[]) => {
+        this.users_count = lastObject[lastObject.length - 1].id;
       })
       .catch( function( error ) {
         // an error has occurred, the error code can be retrieved with fault.statusCode
@@ -169,16 +170,14 @@ export class UsersService {
   Delete_user(login: string): Promise<void> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
-
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'user_data' ).find( queryBuilder )
       .then( ( foundUser: Res[] ) => {
         Backendless.Data.of('user_data').remove(foundUser[0])
           .then(() => {
             this.Delete_user_in_array(foundUser[0].login);
-            console.log('removed OK');
           })
           .catch(function (error) {
-            console.log(error);
           });
       })
       .catch( function( fault ) {
@@ -208,7 +207,6 @@ export class UsersService {
     Backendless.Messaging.sendEmail( subject,
       bodyParts, recipients)
       .then( function( response ) {
-        console.log( 'message has been sent' );
       })
       .catch( function( error ) {
         console.log( 'error' + error.message );
@@ -218,6 +216,7 @@ export class UsersService {
   Load_user_by_login(login: string): Promise<void> {
     const whereClause = `login = '${login}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'user_data' ).find( queryBuilder )
       .then( ( foundUsers: User[] ) => {
         this.user_for_access = foundUsers[0];
@@ -227,13 +226,9 @@ export class UsersService {
       });
   }
   update_users(user: User): number {
-    console.log(user);
-    console.log(1);
     for ( let i = 0; i < this.users.length; i++) {
       if (this.users[i].login === user.login) {
-        console.log( this.users[i]);
         this.users[i] = user;
-        console.log( this.users[i]);
         return 1;
       }
     }

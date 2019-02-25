@@ -18,7 +18,7 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
   comment_text = '';
   article_old: string;
   article_names: ArticleName[];
-  access_write: number;
+  access_write: string;
   public article: Article = new Article('', '', -1, '', '');
 
   constructor(public articleService: ArticleService, private activatedRoute: ActivatedRoute,
@@ -72,6 +72,7 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
     const newComment = new Comment(this.commentService.last_comment_id + 1, this.article_name, this.comment_text, login);
     this.commentService.add_comment(newComment);
     this.comment_text = '';
+    this.commentService.Load_count_comment();
     return null;
   }
   access_comment(article: Article): number {

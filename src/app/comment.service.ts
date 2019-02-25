@@ -6,7 +6,7 @@ import {ValidationErrors} from '@angular/forms';
 
 
 const CommentsStore = Backendless.Data.of('comment_data');
-
+const PAGE_SIZE = 50;
 export class Comment {
   id: number;
   article: string;
@@ -31,15 +31,13 @@ export class CommentService {
   public last_comment_id = 0;
   get_comments_by_article(article: string) {
     const whereClause = `article = '${article}'`;
-    console.log(whereClause);
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     CommentsStore.find( queryBuilder ).then(( foundComments: Comment[] ) => {
           if (foundComments.length !== 0) {
             this.comments = foundComments;
-            console.log(this.comments);
             } else {
             this.comments = [];
-            console.log(foundComments);
           }
         }
       ).catch(function( fault ) {
@@ -51,9 +49,12 @@ export class CommentService {
     });
   }
   Load_count_comment (): any {
-    Backendless.Data.of( 'comment_data' ).findLast()
-      .then( ( lastObject: User ) => {
-        this.last_comment_id = lastObject.id;
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setSortBy( ['id'] );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    Backendless.Data.of( 'comment_data' ).find(queryBuilder)
+      .then( ( lastObject: any[] ) => {
+        this.last_comment_id = lastObject[lastObject.length - 1].id;
       })
       .catch( function( error ) {
         // an error has occurred, the error code can be retrieved with fault.statusCode

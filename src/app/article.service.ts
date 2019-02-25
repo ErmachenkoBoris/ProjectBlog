@@ -75,7 +75,7 @@ export class ArticleName {
   }
 }
 
-
+const PAGE_SIZE = 50;
 const ArticlesStore = Backendless.Data.of('article_data');
 const TopicsStore = Backendless.Data.of('article_topic');
 
@@ -104,7 +104,6 @@ constructor() {
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     ArticlesStore.find<Article>(queryBuilder).then((articles: Article[]) => {
       this.articles = articles;
-      // console.log(articles);
     });
   }
   Load_all_names_topic() {
@@ -112,7 +111,6 @@ constructor() {
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
       this.article_names = articleName;
-      // console.log(articleName);
     });
   }
   Load_all_topics() {
@@ -120,12 +118,12 @@ constructor() {
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     TopicsStore.find<ArticleTopic>(queryBuilder).then((topics: ArticleTopic[]) => {
       this.topics = topics;
-      console.log(topics);
     });
   }
   Search_email(email: string): Observable<ValidationErrors> {
     const whereClause = `email = '${email}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'user_data' ).find( queryBuilder ).then(function( foundContacts ) {
           if (foundContacts.length !== 0) {
@@ -146,6 +144,7 @@ constructor() {
   Search_name_article(name: string): Observable<ValidationErrors> {
     const whereClause = `name = '${name}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return new Observable<ValidationErrors | null>(observer => {
       Backendless.Data.of( 'article_name' ).find( queryBuilder ).then(function( foundNames ) {
           if (foundNames.length !== 0) {
@@ -165,6 +164,7 @@ constructor() {
   Load_choose_Articles (topicArticle: string): any {
     const whereClause = `topic = '${topicArticle}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticles: Article[] ) => {
         this.articles_choosen = foundArticles;
@@ -177,6 +177,7 @@ constructor() {
   Load_choose_Articles_names (topicArticle: string): any {
     const whereClause = `topic = '${topicArticle}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     Backendless.Data.of( 'article_name' ).find( queryBuilder )
       .then( ( foundArticles: ArticleName[] ) => {
         this.articles_choosen_names = foundArticles;
@@ -188,7 +189,9 @@ constructor() {
   }
 
   Load_count_names (): any {
-    Backendless.Data.of( 'article_name' ).findLast()
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    Backendless.Data.of( 'article_name' ).findLast(queryBuilder)
       .then( ( lastObject: User ) => {
         this.names_count = lastObject.id;
       })
@@ -202,6 +205,7 @@ constructor() {
   Load_article_for_read(name_Article: string): Promise<void> {
     const whereClause = `name = '${name_Article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticles: Article[] ) => {
         this.article_read = foundArticles[0];
@@ -213,6 +217,7 @@ constructor() {
   Load_article_Name_for_read(name_Article: string): Promise<void> {
     const whereClause = `name = '${name_Article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'article_name' ).find( queryBuilder )
       .then( ( foundArticles: ArticleName[] ) => {
         this.article_read_name = foundArticles[0];
@@ -222,6 +227,12 @@ constructor() {
       });
   }
   Add_Article(article: Article): Promise<void> {
+    this.names_count++;
+    return Backendless.Data.of( 'article_data' ).save<Article>(article).then((savedArticle: Article) => {
+      this.articles.push(savedArticle);
+    });
+  }
+  Update_Article(article: Article): Promise<void> {
     this.names_count++;
     return Backendless.Data.of( 'article_data' ).save<Article>(article).then((savedArticle: Article) => {
       this.articles.push(savedArticle);
@@ -238,10 +249,16 @@ constructor() {
       this.Load_all_names_topic();
     });
   }
+  Update_article_name(name: ArticleName): Promise<void> {
+    return Backendless.Data.of( 'article_name' ).save<ArticleName>(name).then((savedArticleName: ArticleName) => {
+      this.Update_array_article_names(name);
+      this.Load_all_names_topic();
+    });
+  }
   Delete_article(article: string) {
     const whereClause = `name = '${article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
-
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticle: Res[] ) => {
         this.result_data = foundArticle[0].objectId;
@@ -272,6 +289,7 @@ constructor() {
   Delete_article_name(article: string): Promise<void> {
     const whereClause = `name = '${article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'article_name').find( queryBuilder )
       .then( ( foundArticles: Res[] ) => {
         this.result_name = foundArticles[0].objectId;
@@ -289,12 +307,12 @@ constructor() {
   Delete_topic(topic: string): Promise<void> {
     const whereClause = `topic = '${topic}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     return Backendless.Data.of( 'article_topic').find( queryBuilder )
       .then( ( foundArticles: Res[] ) => {
         this.result_name = foundArticles[0].objectId;
         Backendless.Data.of('article_topic').remove(foundArticles[0])
-          .then((timestamp) => {
-            console.log('delete') ;
+          .then((timestamp) => {;
           })
           .catch(function (error) {
             console.log(error);
@@ -306,7 +324,7 @@ constructor() {
   Delete_all_article_for_topic(topic: string) {
     const whereClause = `topic = '${topic}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
-
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticle: Res[] ) => {
         for (let i = 0; i < foundArticle.length; i++) {
@@ -335,6 +353,14 @@ constructor() {
       })
       .catch( function( fault ) {
       });
+  }
+  Update_array_article_names(name: ArticleName): void {
+    for (let i = 0; i < this.article_names.length; i++) {
+        if (this.article_names[i].name === name.name) {
+          this.article_names[i] = name;
+          break;
+        }
+    }
   }
 }
 

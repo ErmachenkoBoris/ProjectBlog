@@ -89,17 +89,18 @@ export class SuggestArticlesComponent implements OnInit, DoCheck {
     this.articleService.Load_article_Name_for_read(suggestName).then(
       () => {
         this.Article_tmp = this.articleService.article_read_name;
-        this.articleService.Delete_article_name(this.articleService.article_read.name).then(
+        this.Article_tmp.confirmation = 1;
+        this.articleService.Update_article_name(this.Article_tmp).then(
           () => {
-            this.Article_tmp.confirmation = 1;
-            this.articleService.Add_article_name(this.Article_tmp);
+          this.Load_Suggest_Name();
+        this.articleService.Load_all_names_topic();
           }
-        )
-
+        );
         const topic = new ArticleTopic(this.Article_tmp.id, this.Article_tmp.topic);
         this.articleService.Add_article_topic(topic);
-      }
-    );
-}
+
+          }
+        );
+  }
 
 }

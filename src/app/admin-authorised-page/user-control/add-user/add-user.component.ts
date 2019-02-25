@@ -183,7 +183,6 @@ export class AddUserComponent implements OnInit {
     return 1;
   }
   close_add_form(): void {
-    console.log(this.router.url);
     this.router.navigate(['admin', this.login, { outlets: { control_user: ['control']}}]);
 
   }

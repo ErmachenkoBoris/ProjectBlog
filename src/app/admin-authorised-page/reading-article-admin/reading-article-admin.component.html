@@ -1,6 +1,6 @@
 <div class="article">
-  <div class="article_header" >{{this.articleService.article_read.name}}<button (click)="Close_article()" class="close_article_bottom">
-    X</button><button (click)="Delete_article()">Удалить</button></div>
+  <div class="article_header" >{{this.articleService.article_read.name}}</div>
+  <button (click)="Close_article()" class="close_article_bottom">X</button><!--<button (click)="Delete_article()">Удалить</button>-->
 
   <div class="article_content">{{this.articleService.article_read.article}}</div>
   <div class="article__comment">

@@ -1,13 +1,17 @@
 <div class="article_add">
   <div [ngSwitch]="this.Return_suggest()">
   <div *ngSwitchCase="0" class="article_add__header">Write an article in the section {{this.topic}}
+    <button (click)="this.Close_add_form()" class="close_add_form_bottom">
+      X
+    </button>
   </div>
     <div *ngSwitchCase="1" class="article_add__header_suggest">
       Here you can write an article in a non-existent section. <br>The administrator will consider your proposal!
+      <button (click)="this.Close_add_form()" class="close_add_form_bottom">
+        X
+      </button>
     </div>
-  <button (click)="this.Close_add_form()" class="close_add_form_bottom">
-    X
-  </button>
+
   <form class="article_add__add_form" [formGroup]="add_form" >
 
     <div *ngIf="Return_suggest()">
@@ -26,13 +30,20 @@
     <div class="error_message" *ngIf="this.add_form.get('text').getError('required') && this.add_form.controls['text'].touched">
       field is required</div>
 
-    <div>Scope</div>
+    <div>Scope for WRITE COMMENT</div>
     <div>
-    <input #all type="checkbox" checked="checked">for all
+      <input #alll type="checkbox"  (change)="this.Change_comment_scope()" checked="checked">for all
     </div>
-    <div *ngIf="!all.checked">
-      <input type="checkbox" checked="checked">only for me
+    <div *ngIf="!alll.checked">
+      <input #mee  type="checkbox" checked="checked"  (change)="Change_comment_scope__item()">only for me
     </div>
+
+    <div *ngIf="this.scope_comment_boolean__item">
+      write emails:
+    </div>
+    <input *ngIf="this.scope_comment_boolean__item" type="text" placeholder="write emails" formControlName="scope_comment">
+
+
     <button class="add_form__button_cansel" (click)="this.location.back();">Cansel</button>
     <button class="add_form__button_add" (click)="Submit_add_form()">Add</button>
   </form>

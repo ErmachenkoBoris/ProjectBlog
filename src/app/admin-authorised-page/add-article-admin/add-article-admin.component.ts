@@ -128,11 +128,9 @@ export class AddArticleAdminComponent implements OnInit {
   }
   Change_reading_scope(): void {
     this.scope_read_boolean = !this.scope_read_boolean;
-    console.log(this.scope_read_boolean);
   }
   Change_comment_scope(): void {
     this.scope_comment_boolean = !this.scope_comment_boolean;
-    console.log(this.scope_comment_boolean);
   }
   Change_reading_scope__item(): void {
     this.scope_read_boolean__item = !this.scope_read_boolean__item;

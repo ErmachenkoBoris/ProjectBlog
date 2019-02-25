@@ -145,6 +145,7 @@ export class RegisterFormComponent implements OnInit {
         }
       }
       const count = this.personsService.users_count + 1;
+      this.personsService.Load_count_names();
       const user = new User(
         this.register_form.value.admin,
         this.register_form.value.email,
@@ -154,7 +155,8 @@ export class RegisterFormComponent implements OnInit {
         this.register_form.value.password,
         this.register_form.value.surname);
       const error = this.personsService.Add_user(user);
-      localStorage.setItem('currentUser', JSON.stringify({ login: this.register_form.value.login, email: this.register_form.value.email}));
+      localStorage.setItem('currentUser', JSON.stringify({ login: this.register_form.value.login, email: this.register_form.value.email,
+      access_suggest: '1', access_write: '1'}));
       this.router.navigate(['/user', this.register_form.value.login]) ;
       return error;
 

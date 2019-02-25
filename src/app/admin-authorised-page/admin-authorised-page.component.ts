@@ -31,7 +31,6 @@ export class AdminAuthorisedPageComponent implements OnInit {
       login = this.currentUser.login;
     }
     if (!login || login !== this.loginUser || !this.loginUser) {
-      console.log(login);
       this.router.navigate(['']);
     }
     this.articleService.Load_all_topics();

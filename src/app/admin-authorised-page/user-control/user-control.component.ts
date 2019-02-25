@@ -82,7 +82,6 @@ export class UserControlComponent implements OnInit, DoCheck {
     // this.userService.Load_All_users();
   }
   get_bool(num: any): boolean {
-    // console.log(num);
     if (num === '1' ) {
       return true;
     } else {
@@ -90,7 +89,6 @@ export class UserControlComponent implements OnInit, DoCheck {
     }
   }
   get_un_bool(num: any): boolean {
-    // console.log(num);
     if (num === '1' ) {
       return false;
     } else {
