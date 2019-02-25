@@ -2,18 +2,19 @@
   <button class="table__close_button" (click)="Close_user_control()">close</button>
   <table class="user_control__table">
     <tr class="table__row_main">
-      <td class="table__column_item">id</td>
-      <td class="table__column_item" >author</td>
-      <td class="table__column_item">topic</td>
-      <td class="table__column_item">name</td>
+      <td class="table__column_item">Id:</td>
+      <td class="table__column_item" >Author:</td>
+      <td class="table__column_item">Topic:</td>
+      <td class="table__column_item"></td>
+      <td class="table__column_item">Name:</td>
       <td class="table__column_item"></td>
     </tr>
     <tr *ngFor="let article of this.articleService.article_names; let i = index" class="table__row">
       <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{article.id}}</td>
       <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{article.author}}</td>
-      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{article.topic}}
-        <button class="table__delete_button" (click)="Delete_topic(article.topic)">delete</button>
-      </td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{article.topic}}</td>
+      <td class="table__column_item" [style.background]="this.Get_back_td(i)">
+        <button class="table__delete_button" (click)="Delete_topic(article.topic)">delete ALL TOPIC</button></td>
       <td class="table__column_item" [style.background]="this.Get_back_td(i)">{{article.name}}</td>
       <td class="table__column_item" [style.background]="this.Get_back_td(i)">
         <button class = "table__delete_button"(click)="this.Delete_article(article.name)">delete</button>

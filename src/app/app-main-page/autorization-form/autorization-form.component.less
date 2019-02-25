@@ -1,4 +1,4 @@
-@theme-color: #298bb1;
+@import (once, less) "../app-main-page.component.less";
 .radius(@radius:6px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
@@ -11,7 +11,7 @@ form-authorization__item {
   margin-bottom: 2vh;
   //border: 1vh skyblue solid ;
   .radius(2vh);
-  background: #5a95ee;
+  background: @theme-color;
 }
 .form-authorization{
   /*display: flex;
@@ -29,15 +29,15 @@ form-authorization__item {
   //border: 1vh skyblue solid ;
   .radius(2vh);
   color: white;
-  background: #509dff;
+  background: @theme-color;
   &:focus {
-    color: #3644bb;
-    background: white;
+    color: @focus-color;
+    background: @white-color;
   }
 }
 .error_message{
   font-size: 1.5vh;
-  color: #643332;
+  color: @error-color;
   text-align: center;
 }
 .form_add__submit_button {
@@ -49,12 +49,12 @@ form-authorization__item {
   height: 3vh;
   border: none;
   outline: none;
-  background: #3dff5c;
+  background: @warning-good-color;
   cursor: pointer;
 
 }
 
-::-webkit-input-placeholder {color: white;}/* webkit */
-::-moz-placeholder          {color:white; }/* Firefox 19+ */
-:-moz-placeholder           {color:white; }/* Firefox 18- */
-:-ms-input-placeholder      {color:white; }/* IE */
+::-webkit-input-placeholder {color: @white-color;}/* webkit */
+::-moz-placeholder          {color: @white-color; }/* Firefox 19+ */
+:-moz-placeholder           {color: @white-color; }/* Firefox 18- */
+:-ms-input-placeholder      {color: @white-color; }/* IE */

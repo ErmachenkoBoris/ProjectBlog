@@ -1,7 +1,4 @@
-@theme-color: #0fa0ff;
-@shadow-color: #094773;
-
-@back-info-color: #7eb0ff;
+@import (once, less) "../app-main-page/app-main-page.component.less";
 .radius(@radius:6px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
@@ -25,21 +22,20 @@
 }
 .header__font {
   font-family: "Agency FB";
-  color: white;
+  color: @white-color;
   font-weight: bold;
 }
 
 .admin_page__menu {
   font-size: 2vh;
   margin: 0;
-  //margin-left: 5vw;
+  color: @shadow-color;
+  font-weight: bold;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   height: 55vh;
-  //flex-basis: 18vw;
-  //width: 20vw;
 }
 
 .admin_page__footer {
@@ -65,7 +61,7 @@
 .header_name-blog{
   height: 10vh;
   font-family: "Tempus Sans ITC", "Comic Sans MS";
-  color:white;
+  color: @white-color;
   font-size: 5vh;
   font-weight: bold;
   display: flex;
@@ -84,13 +80,13 @@
 }
 .form__button_item1 {
   flex-basis: 8vw;
-  color: white;
+  color: @white-color;
   font-weight: bold;
   margin-right: 1vh;
   margin-top: 5vh;
   .radius(2vh);
   height: 4vh;
-  background: #d65fff;
+  background: @theme-color;
   border: none;
   cursor: pointer;
   outline: none;
@@ -113,7 +109,7 @@ ul {
   flex-basis: 76vw;
   width: 76vw;
   height: 10vh;
-  background: #0e60a1;
+  background: @shadow-color;
   font-size: 2.4vh;
   color: white;
   //padding: 25vh;
@@ -130,7 +126,7 @@ ul {
 
 .menu__topic:hover {
   background: @theme-color;
-  color: white;
+  color: @white-color;
   transform: translateX(2vw);
 }
 
@@ -147,7 +143,6 @@ li{
 }
 .menu__topic {
   padding-left: 1vw;
-  //padding-bottom: 2vh;
   padding-top: 2vh;
   width: 19vw;
   height: 4vh;
@@ -179,32 +174,33 @@ li{
 
 }
 .admin_age__names_article_item{
+  color: @shadow-color;
   padding: 2vh;
   font-size: 3vh;
 }
 .admin_age__names_article_item:hover {
   padding: 2vh;
   font-size: 2vh;
-  color: #0f81d4;
+  color: @theme-color;
   font-size: 3vh;
   cursor: pointer;
 }
 .admin_age__button_add_article{
   color: white;
-  background: #0e60a1;
+  background: @shadow-color;
   cursor: pointer;
   padding: 2vh;
 }
 .context_container__menu_bottom{
   margin-top: 10vh;
   flex: auto;
-  color: white;
-  background: #0e60a1;
+  color: @white-color;
+  background: @shadow-color;
   cursor: pointer;
   padding: 2vh;
 }
 .context_container__menu_bottom:hover{
-  background: #159bff;
+  background: @theme-color;
 }
 .admin_page__menu_button{
   display: flex;

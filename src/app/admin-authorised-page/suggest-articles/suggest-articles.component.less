@@ -1,8 +1,6 @@
+@import (once, less) "../../app-main-page/app-main-page.component.less";
 * {
   outline: 0 !important;
-}
-.radius(@radius) {
-  border-radius: @radius;
 }
 .suggest_articles{
   position: absolute;
@@ -18,7 +16,7 @@
 }
 .table__row{
   &_main {
-    color: #ec0aff;
+    color: @shadow-color;
     font-size: 3vh;
   }
 }
@@ -28,42 +26,42 @@
 }
 .suggest_articles__button_close{
   .radius(2vh);
-  color: white;
+  color: @white-color;
   width: 10vw;
   height: 5vh;
-  background: #0e60a1;
+  background: @shadow-color;
 }
 .suggest_articles__header{
   padding: 2vh;
   font-size: 4.5vh;
-  color: #001588;
+  color: @shadow-color;
 }
 .table__option_button_delete{
   margin: 1vh;
   padding: 1vh;
   .radius(1vh);
   color: white;
-  background: #a13f3c;
+  background: @error-color;
 }
 .table__option_button_accept{
   margin: 1vh;
-  color: white;
+  color: @white-color;
   padding: 1vh;
   .radius(1vh);
-  background: #41a15c;
+  background: @warning-good-color;
 }
 .table__option_button_read{
   padding: 1vh;
   .radius(1vh);
   margin: 1vh;
   color: white;
-  background: #0e60a1;
+  background: @shadow-color;
 }
 .table__unblock_button{
   margin: 1vh;
   padding: 1vh;
   .radius(1vh);
-  color: white;
-  background: #47a14f;
+  color: @white-color;
+  background: @warning-good-color;
 }
 

@@ -1,5 +1,17 @@
-@theme-color: #0fa0ff;
-@shadow-color: #094773;
+ @theme-color: #0fa0ff;
+  @focus-color: #0a5e9d;
+  @shadow-color: #153e7c;
+  @white-color: #ffffff;
+  @error-color: #852259;
+  @warning-good-color: #49ff85;
+  @warning-bad-color: #a87722;
+ @back-info-color: #7cc2ff;
+ @back-info-light-color: #c2e5ff;
+ @article-text-color: #d6d6d6;
+ @black-color: black;
+.main-page__green_theme{
+
+}
 .radius(@radius:6px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
@@ -8,9 +20,6 @@
 
 .main-page {
   position: relative;
-  // display: flex;
-  //height: 100%;
-  //width: 100%;
 }
 
 .main-page__header {
@@ -105,7 +114,7 @@ body {
   margin-top: 5vh;
   .radius(2vh);
   height: 4vh;
-  background: #d65fff;
+  background: @shadow-color;
   border: none;
   cursor: pointer;
   outline: none;
@@ -121,7 +130,7 @@ body {
   border: none;
   cursor: pointer;
   outline: none;
-  background: #509dff;
+  background: @theme-color;
 }
 
 .content {

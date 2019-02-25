@@ -1,15 +1,11 @@
+@import (once, less) "../../app-main-page/app-main-page.component.less";
 * {
   outline: 0 !important;
-}
-.radius(@radius:6px) {
-  -webkit-border-radius: @radius;
-  -moz-border-radius: @radius;
-  border-radius: @radius;
 }
 .table__column_item{
 
   flex: 1 1 8vw;
-  height: 10vh;
+  height: 12vh;
 }
 .user_control__table{
 
@@ -21,7 +17,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   padding: 1vh;
-  color: #52308b;
+  color: @shadow-color;
   // align-items: center;
 
 }
@@ -31,7 +27,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   width: 78vw;
-  background: #d3e6ff;
+  background: @back-info-light-color;
   position: absolute;
   top: 10vh;
 }
@@ -40,30 +36,31 @@
   flex-direction: row;
   font-weight: bold;
   padding: 1vh;
-  color: rebeccapurple;
+  color: @shadow-color;
 }
 .table__delete_button {
   .radius(2vh);
   padding: 0.5vh;
-  background: #fe836f;
+  color: @white-color;
+  background: @error-color
 }
 .table__unblock_button {
   .radius(2vh);
   padding: 0.5vh;
-  background: #70fe97;
+  background: @warning-good-color;
 }
 .table__close_button {
   .radius(2vh);
-  color: white;
+  color: @white-color;
   width: 10vw;
   height: 5vh;
-  background: #0e60a1;
+  background: @shadow-color;
 }
 .table__add_button {
   .radius(2vh);
-  color: white;
+  color: @white-color;
   width: 10vw;
   height: 5vh;
-  background: #0e60a1;
+  background: @shadow-color;
 
 }

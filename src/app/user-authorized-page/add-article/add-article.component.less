@@ -1,13 +1,9 @@
-.radius(@radius:6px) {
-  -webkit-border-radius: @radius;
-  -moz-border-radius: @radius;
-  border-radius: @radius;
-}
+@import (once, less) "../../app-main-page/app-main-page.component.less";
 .article_add{
   display: flex;
   position: absolute;
   top: 10vh;
-  background: #d3e6ff;
+  background: @back-info-light-color;
   padding-top: 5vh;
   padding-left: 10vw;
   padding-right: 10vw;
@@ -18,22 +14,20 @@
   height: 40vh;
   width: 60vw;
   font-size: 2vh;
-  //padding: 10vw;
-  //padding-bottom: 0vh;
 }
 .article_add__header{
   font-size: 3.5vh;
-  color: #194073;
+  color: @shadow-color;
 }
 .article_add__header_suggest{
   font-size: 4vh;
-  color: #247346;
+  color: @shadow-color;
 }
 .add_form__name_article{
   padding: 2vh;
   padding-left: 0;
   font-size: 3vh;
-  color: #671f73;
+  color: @shadow-color;
 }
 .name_article__item_name{
   padding: 0.5vh;
@@ -46,17 +40,17 @@
 
 }
 .close_add_form_bottom:hover{
-  background: #ffb396;
+  background: @error-color;
 }
 .error_message {
-  color: #f04356;
+  color: @error-color;
   font-size: 1.8vh;
   margin-top: 0;
   margin-bottom: 1vh;
 }
 .add_form__button_cansel{
-  background: #194073;
-  color: white;
+  background: @shadow-color;
+  color: @white-color;
   font-size: 2vh;
   padding: 1vh;
   margin-top: 3vh;
@@ -65,8 +59,8 @@
   cursor: pointer;
 }
 .add_form__button_add{
-  background: #194073;
-  color: white;
+  background: @shadow-color;
+  color: @white-color;
   font-size: 2vh;
   padding: 1vh;
   margin-top: 1vh;

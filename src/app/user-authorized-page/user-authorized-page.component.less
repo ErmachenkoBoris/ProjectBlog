@@ -1,16 +1,8 @@
-@theme-color: #0fa0ff;
-@shadow-color: #094773;
-
-@back-info-color: #7eb0ff;
-.radius(@radius:6px) {
-  -webkit-border-radius: @radius;
-  -moz-border-radius: @radius;
-  border-radius: @radius;
-}
+@import (once, less) "../app-main-page/app-main-page.component.less";
 
 .user-page {
   position: relative;
-margin: 0;
+  margin: 0;
 }
 
 .user-page__header {
@@ -25,25 +17,22 @@ margin: 0;
 }
 .header__font {
   font-family: "Agency FB";
-  color: white;
+  color: @white-color;
   font-weight: bold;
 }
 
 .user-page__menu {
   font-size: 2vh;
   margin: 0;
-  //margin-left: 5vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   height: 55vh;
-  //flex-basis: 18vw;
-  //width: 20vw;
+
 }
 
 .user-page__footer {
- // margin-top: 20vh;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -65,7 +54,7 @@ margin: 0;
 .header_name-blog{
   height: 10vh;
   font-family: "Tempus Sans ITC", "Comic Sans MS";
-  color:white;
+  color: @white-color;
   font-size: 5vh;
   font-weight: bold;
   display: flex;
@@ -84,13 +73,13 @@ margin: 0;
 }
 .form__button_item1 {
   flex-basis: 8vw;
-  color: white;
+  color: @white-color;
   font-weight: bold;
   margin-right: 1vh;
   margin-top: 5vh;
   .radius(2vh);
   height: 4vh;
-  background: #d65fff;
+  background: @shadow-color;
   border: none;
   cursor: pointer;
   outline: none;
@@ -113,9 +102,9 @@ ul {
   flex-basis: 70vw;
   width: 70vw;
   height: 55vh;
-  background: #0e60a1;
+  background: @shadow-color;
   font-size: 2.5vh;
-  color: white;
+  color: @white-color;
   //padding: 25vh;
   /*display: flex;
   flex-direction: column;
@@ -130,7 +119,7 @@ ul {
 
 .menu__topic:hover {
   background: @theme-color;
-  color: white;
+  color: @white-color;
   transform: translateX(2vw);
 }
 
@@ -174,14 +163,14 @@ li{
   cursor: pointer;
   margin: 3vh;
   font-size: 2.5vh;
-  color: #2773ff;
+  color: @theme-color;
 }
 .user_age__names_article_item:hover{
-  color: #4d12ff;
+  color: @shadow-color;
 }
 .user_age__button_add_article{
-  color: white;
-  background: #2773ff;
+  color: @white-color;
+  background: @theme-color;
   cursor: pointer;
   padding: 2vh;
   width: 40vw;
