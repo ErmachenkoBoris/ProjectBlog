@@ -99,21 +99,21 @@ constructor() {
     this.Load_all_names_topic();
   }
 
-  Load_all_articles() {
+  Load_all_articles(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     ArticlesStore.find<Article>(queryBuilder).then((articles: Article[]) => {
       this.articles = articles;
     });
   }
-  Load_all_names_topic() {
+  Load_all_names_topic(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
       this.article_names = articleName;
     });
   }
-  Load_all_topics() {
+  Load_all_topics(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setPageSize( 50 ).setOffset( 0 );
     TopicsStore.find<ArticleTopic>(queryBuilder).then((topics: ArticleTopic[]) => {
@@ -196,7 +196,6 @@ constructor() {
         this.names_count = lastObject.id;
       })
       .catch( function( error ) {
-        // an error has occurred, the error code can be retrieved with fault.statusCode
       });
 
   }
@@ -255,7 +254,7 @@ constructor() {
       this.Load_all_names_topic();
     });
   }
-  Delete_article(article: string) {
+  Delete_article(article: string): void {
     const whereClause = `name = '${article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
@@ -312,7 +311,7 @@ constructor() {
       .then( ( foundArticles: Res[] ) => {
         this.result_name = foundArticles[0].objectId;
         Backendless.Data.of('article_topic').remove(foundArticles[0])
-          .then((timestamp) => {;
+          .then((timestamp) => {
           })
           .catch(function (error) {
             console.log(error);
@@ -321,7 +320,7 @@ constructor() {
       .catch( function( fault ) {
       });
   }
-  Delete_all_article_for_topic(topic: string) {
+  Delete_all_article_for_topic(topic: string): void {
     const whereClause = `topic = '${topic}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );

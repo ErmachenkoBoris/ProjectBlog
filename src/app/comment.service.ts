@@ -57,7 +57,6 @@ export class CommentService {
         this.last_comment_id = lastObject[lastObject.length - 1].id;
       })
       .catch( function( error ) {
-        // an error has occurred, the error code can be retrieved with fault.statusCode
       });
 
   }

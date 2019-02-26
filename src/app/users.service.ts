@@ -58,7 +58,7 @@ export class UsersService {
   public users: User[] = [];
   public email_found = 0;
   public user_for_access: User;
-  Load_All_users() {
+  Load_All_users(): void {
    const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setSortBy( ['id'] ).setPageSize( PAGE_SIZE ).setOffset( 0 );
     UsersStore.find<User>(queryBuilder).then((users: User[]) => {
@@ -151,7 +151,7 @@ export class UsersService {
     }).catch((error) => {
     });
   }
-  Get_users_count() {
+  Get_users_count(): void {
     this.Load_count_names();
   }
   Load_count_names (): any {
@@ -184,7 +184,7 @@ export class UsersService {
       });
 
   }
-  Delete_user_in_array(login: string) {
+  Delete_user_in_array(login: string): void {
     let k = 0 ;
     const usersTmp: User[] = [];
     for (let i = 0; i < this.users.length; i++) {
@@ -200,7 +200,7 @@ export class UsersService {
       this.users[i] = usersTmp[i];
     }
   }
-  Send_emails(subject: string, text: string, recipients: string[]) {
+  Send_emails(subject: string, text: string, recipients: string[]): void {
     const bodyParts = new Backendless.Bodyparts();
     bodyParts.textmessage = text;
     bodyParts.htmlmessage = text;

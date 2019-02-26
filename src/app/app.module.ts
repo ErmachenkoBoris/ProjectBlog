@@ -23,7 +23,6 @@ import { SendEmailsComponent } from './admin-authorised-page/user-control/send-e
 import { SuggestArticlesComponent } from './admin-authorised-page/suggest-articles/suggest-articles.component';
 import { ReadArticleComponent } from './admin-authorised-page/suggest-articles/read-article/read-article.component';
 import { ArticleControlComponent } from './admin-authorised-page/article-control/article-control.component';
-import { ReadAccessPipe } from './read-access.pipe';
 
 Backendless.initApp(environment.backendless.APP_ID, environment.backendless.API_KEY);
 // const PAGESIZE = 80;
@@ -51,8 +50,7 @@ Backendless.initApp(environment.backendless.APP_ID, environment.backendless.API_
     SendEmailsComponent,
     SuggestArticlesComponent,
     ReadArticleComponent,
-    ArticleControlComponent,
-    ReadAccessPipe
+    ArticleControlComponent
   ],
   imports: [
     BrowserModule, ReactiveFormsModule, AppRoutingModule, FormsModule

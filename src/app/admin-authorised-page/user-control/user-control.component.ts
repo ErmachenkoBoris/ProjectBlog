@@ -49,15 +49,13 @@ export class UserControlComponent implements OnInit, DoCheck {
         this.User_tmp = this.userService.user_for_access;
         this.User_tmp.access_suggest = '0';
         this.userService.Update_user(this.User_tmp);
-        // this.userService.Add_user(this.User_tmp);
       });
-    // this.userService.Load_All_users();
       }
   UnBlock_suggest(login: string): void {
     this.userService.Load_user_by_login(login).then(
       () => {
         this.User_tmp = this.userService.user_for_access;
-        this.User_tmp.access_suggest ='1';
+        this.User_tmp.access_suggest = '1';
         this.userService.Update_user(this.User_tmp);
       });
     // this.userService.Load_All_users();

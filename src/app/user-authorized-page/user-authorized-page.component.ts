@@ -69,7 +69,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
       this.article_Name.length = k + 1;
     }
   }
-  change_back_info(index: number) {
+  change_back_info(index: number): void {
     if (index !== 10) {
       index++;
       const r = 14 + index * 33;
@@ -81,7 +81,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     }
   }
 
-  choose_articles(name: string) {
+  choose_articles(name: string): void {
     this.articleService.Load_choose_Articles_names(name);
   }
 
