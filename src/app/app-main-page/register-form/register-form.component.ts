@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl, ValidationErrors} from '@angular/forms';
-import {UsersService, User} from '../../users.service';
+import {UsersService} from '../../users.service';
 import {Observable} from 'rxjs';
-import {AsyncValidatorFn} from '@angular/forms';
 import {map} from 'rxjs/operators';
 import {AbstractControl} from '@angular/forms';
-import {delay} from 'rxjs/operators';
-import {__values} from 'tslib';
+import {User} from '../../UserClass';
 import {Router} from '@angular/router';
 
 @Component({

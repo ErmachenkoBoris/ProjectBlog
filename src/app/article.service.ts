@@ -1,9 +1,8 @@
-import {DoCheck, Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import Backendless from 'backendless';
 import {Observable} from 'rxjs';
 import {ValidationErrors} from '@angular/forms';
-import {User} from './users.service';
-import {delay} from 'q';
+import {User} from './UserClass';
 
 class Res {
   access: '';
@@ -101,21 +100,21 @@ constructor() {
 
   Load_all_articles(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
-    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    queryBuilder.setPageSize( 50 ).setOffset( 0 ).setSortBy( ['id'] );
     ArticlesStore.find<Article>(queryBuilder).then((articles: Article[]) => {
       this.articles = articles;
     });
   }
   Load_all_names_topic(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
-    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    queryBuilder.setPageSize( 50 ).setOffset( 0 ).setSortBy( ['id'] );
     Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
       this.article_names = articleName;
     });
   }
   Load_all_topics(): void {
     const queryBuilder = Backendless.DataQueryBuilder.create();
-    queryBuilder.setPageSize( 50 ).setOffset( 0 );
+    queryBuilder.setPageSize( 50 ).setOffset( 0 ).setSortBy( ['id'] );
     TopicsStore.find<ArticleTopic>(queryBuilder).then((topics: ArticleTopic[]) => {
       this.topics = topics;
     });

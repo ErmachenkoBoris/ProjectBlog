@@ -14,6 +14,7 @@ import {SendEmailsComponent} from './admin-authorised-page/user-control/send-ema
 import {SuggestArticlesComponent} from './admin-authorised-page/suggest-articles/suggest-articles.component';
 import {ReadArticleComponent} from './admin-authorised-page/suggest-articles/read-article/read-article.component';
 import {ArticleControlComponent} from './admin-authorised-page/article-control/article-control.component';
+import {ErrorPageComponentComponent} from './error-page-component/error-page-component.component';
 
 const routes: Routes = [
   { path: '', component: AppMainPageComponent },
@@ -35,7 +36,7 @@ const routes: Routes = [
       {path: 'article_control', component: ArticleControlComponent, outlet: 'article_control'}
     ]},
   {path: 'user/:login/:nameArticle', component: ReadingArticleComponent, outlet: 'article_read' },
-  {path: '**', component: AppMainPageComponent }
+  {path: '**', component: ErrorPageComponentComponent }
 ];
 
 @NgModule({

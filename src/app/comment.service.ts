@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {User} from './users.service';
 import Backendless from 'backendless';
-import {Observable} from 'rxjs';
-import {ValidationErrors} from '@angular/forms';
-
 
 const CommentsStore = Backendless.Data.of('comment_data');
 const PAGE_SIZE = 50;
@@ -33,6 +29,7 @@ export class CommentService {
     const whereClause = `article = '${article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    queryBuilder.setSortBy( ['id'] );
     CommentsStore.find( queryBuilder ).then(( foundComments: Comment[] ) => {
           if (foundComments.length !== 0) {
             this.comments = foundComments;

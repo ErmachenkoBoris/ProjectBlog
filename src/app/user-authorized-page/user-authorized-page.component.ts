@@ -3,6 +3,8 @@ import {Article, ArticleName} from '../article.service';
 import {ArticleTopic} from '../article.service';
 import {ArticleService} from '../article.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
+import {UsersService} from '../users.service';
+import {User} from '../UserClass';
 
 @Component({
   selector: 'app-user-authorized-page',
@@ -10,7 +12,8 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
   styleUrls: ['./user-authorized-page.component.less']
 })
 export class UserAuthorizedPageComponent implements OnInit, DoCheck {
-  constructor(public articleService: ArticleService, public router: Router, public activatedRoute: ActivatedRoute) {
+  constructor(public articleService: ArticleService, public router: Router, public activatedRoute: ActivatedRoute,
+              public userService: UsersService) {
   }
   read_article = 0;
   name_for_read: string;
@@ -18,6 +21,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   select_button_index = -1;
   background_menu_array: string[] = [];
   loginUser: string;
+  emailUser: string;
   article_Name: ArticleName[] = [];
   access_suggest: string;
   scope_read_boolean = false;
@@ -25,6 +29,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   scope_read_boolean__item = false;
   scope_comment_boolean__item = false;
   ngOnInit(): void {
+    this.userService.Load_access_suggest_by_login(this.loginUser);
     this.activatedRoute.params.subscribe((params: Params) => {
        this.loginUser = params['login'];
     });
@@ -32,6 +37,8 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     let login = '';
     if (currentUser) {
       login = currentUser.login;
+     // console.log(currentUser);
+      this.emailUser = currentUser.email;
       this.access_suggest = currentUser.access_suggest;
     }
     if (!login || login !== this.loginUser || !this.loginUser) {
@@ -56,6 +63,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   }
   ngDoCheck(): void {
     if (this.articleService.articles_choosen_names) {
+      this.userService.Load_access_suggest_by_login(this.loginUser);
       let k = 0;
       for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
         const flag = this.access_read(this.articleService.articles_choosen_names[i]);
@@ -99,13 +107,17 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     if (articleName.access_read === 'all') {
       return 1;
     } else {
+      // console.log(1);
       const tmpEmails = articleName.access_read.split(' ');
       for (let i = 0 ; i < tmpEmails.length; i++) {
-        if (tmpEmails[i] === articleName.access_read) {
+        // console.log(tmpEmails[i]);
+        // console.log(this.emailUser);
+        if (tmpEmails[i] === this.emailUser) {
           return 1;
         }
       }
     }
+    console.log(3);
     return 0;
 }
   Change_reading_scope(): void {

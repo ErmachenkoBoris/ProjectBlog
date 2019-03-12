@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import Backendless from 'backendless';
-
+import {APP_BASE_HREF} from '@angular/common';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -23,6 +23,7 @@ import { SendEmailsComponent } from './admin-authorised-page/user-control/send-e
 import { SuggestArticlesComponent } from './admin-authorised-page/suggest-articles/suggest-articles.component';
 import { ReadArticleComponent } from './admin-authorised-page/suggest-articles/read-article/read-article.component';
 import { ArticleControlComponent } from './admin-authorised-page/article-control/article-control.component';
+import { ErrorPageComponentComponent } from './error-page-component/error-page-component.component';
 
 Backendless.initApp(environment.backendless.APP_ID, environment.backendless.API_KEY);
 // const PAGESIZE = 80;
@@ -50,12 +51,14 @@ Backendless.initApp(environment.backendless.APP_ID, environment.backendless.API_
     SendEmailsComponent,
     SuggestArticlesComponent,
     ReadArticleComponent,
-    ArticleControlComponent
+    ArticleControlComponent,
+    ErrorPageComponentComponent
   ],
   imports: [
     BrowserModule, ReactiveFormsModule, AppRoutingModule, FormsModule
   ],
-  providers: [],
+  providers: [{provide: APP_BASE_HREF, useValue : '/' }],
   bootstrap: [AppComponent]
 })
- export class AppModule { }
+ export class AppModule {
+}

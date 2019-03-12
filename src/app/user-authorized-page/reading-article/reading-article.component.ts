@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import { Location } from '@angular/common';
 import {Comment} from '../../comment.service';
 import {CommentService} from '../../comment.service';
+import {UsersService} from '../../users.service';
 
 @Component({
   selector: 'app-reading-article',
@@ -15,6 +16,7 @@ import {CommentService} from '../../comment.service';
 export class ReadingArticleComponent implements OnInit, DoCheck {
   @Input() article_name = '';
   login: string;
+  email: string;
   comment_text = '';
   article_old: string;
   article_names: ArticleName[];
@@ -22,7 +24,8 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
   public article: Article = new Article('', '', -1, '', '');
 
   constructor(public articleService: ArticleService, private activatedRoute: ActivatedRoute,
-              public router: Router, private location: Location, public commentService: CommentService) {
+              public router: Router, private location: Location, public commentService: CommentService,
+              public userService: UsersService) {
     this.article = new Article('', '', -1, '', '');
   }
 
@@ -30,10 +33,14 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser) {
       this.access_write = currentUser.access_write;
+      this.login = currentUser.login;
+      this.email = currentUser.email;
+      // console.log(this.login);
+
+      this.userService.Load_access_comment_by_login(this.login);
     }
     this.activatedRoute.params.subscribe((params: Params) => {
       this.article_name = params['nameArticle'];
-      this.login = params['login'];
     });
     this.article_old = this.article_name;
     if (this.article_name) {
@@ -49,7 +56,9 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
+    // this.userService.Load_access_comment_by_login(this.login);
     if (this.article_name !== this.article_old) {
+      this.userService.Load_access_comment_by_login(this.login);
       this.article_old = this.article_name;
       this.articleService.Load_article_for_read(this.article_name);
       this.article = this.articleService.article_read;
@@ -63,13 +72,15 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
   }
   add_comment(): null {
     if (this.comment_text === '') { return null; }
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    /*const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let login = '';
     if (currentUser) {
       login = currentUser.login;
+      console.log(currentUser);
     }
+    */
     this.commentService.Load_count_comment();
-    const newComment = new Comment(this.commentService.last_comment_id + 1, this.article_name, this.comment_text, login);
+    const newComment = new Comment(this.commentService.last_comment_id + 1, this.article_name, this.comment_text, this.login);
     this.commentService.add_comment(newComment);
     this.comment_text = '';
     this.commentService.Load_count_comment();
@@ -80,12 +91,15 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
       return 1;
     } else {
       const tmpEmails = article.access_comment.split(' ');
+      // console.log(this.email);
       for (let i = 0 ; i < tmpEmails.length; i++) {
-        if (tmpEmails[i] === article.access_comment) {
+        if (tmpEmails[i] === this.email) {
+          // console.log('s');
           return 1;
         }
       }
     }
+    // console.log('ss');
     return 0;
   }
 }

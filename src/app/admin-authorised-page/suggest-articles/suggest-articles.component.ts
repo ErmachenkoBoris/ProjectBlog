@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {ValidationErrors} from '@angular/forms';
 import Backendless from 'backendless';
-import {User} from '../../users.service';
+import {User} from '../../UserClass';
 
 @Component({
   selector: 'app-suggest-articles',

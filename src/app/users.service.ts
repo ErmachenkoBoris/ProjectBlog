@@ -5,6 +5,7 @@ import {ValidationErrors} from '@angular/forms';
 import {Location} from '@angular/common';
 import {Article} from './article.service';
 import {promise} from 'selenium-webdriver';
+import {User} from './UserClass';
 
 class Res {
   admin: 0;
@@ -21,31 +22,6 @@ class Res {
   ___class: '';
 }
 
-export class User {
-  public access_suggest: string;
-  public access_write: string;
-  public admin: number;
-  public email: string;
-  public id: number;
-  public login: string;
-  public name: string;
-  public password: string;
-  public surname: string;
-  public user_for_access: User;
-  constructor(admin: number, email: string, id: number, login: string, name: string, password: string, surname: string,
-              access_write: string = '1', access_suggest: string = '1') {
-  this.admin = admin;
-  this.email = email;
-  this.id = id;
-  this.login = login;
-  this.name = name;
-  this.password = password;
-  this.surname = surname;
-  this.access_suggest = access_suggest;
-  this.access_write = access_write;
-  }
-}
-
 const UsersStore = Backendless.Data.of('user_data');
 const PAGE_SIZE = 50;
 @Injectable({
@@ -57,7 +33,9 @@ export class UsersService {
   public admin = 0;
   public users: User[] = [];
   public email_found = 0;
+  public access_suugest = '';
   public user_for_access: User;
+  public access_comment = '';
   Load_All_users(): void {
    const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setSortBy( ['id'] ).setPageSize( PAGE_SIZE ).setOffset( 0 );
@@ -220,6 +198,31 @@ export class UsersService {
     return Backendless.Data.of( 'user_data' ).find( queryBuilder )
       .then( ( foundUsers: User[] ) => {
         this.user_for_access = foundUsers[0];
+      })
+      .catch( function( fault ) {
+        return null;
+      });
+  }
+  Load_access_suggest_by_login(login: string): Promise<void> {
+    const whereClause = `login = '${login}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    return Backendless.Data.of( 'user_data' ).find( queryBuilder )
+      .then( ( foundUsers: User[] ) => {
+        this.access_suugest = foundUsers[0].access_suggest;
+      })
+      .catch( function( fault ) {
+        return null;
+      });
+  }
+  Load_access_comment_by_login(login: string): Promise<void> {
+    const whereClause = `login = '${login}'`;
+    const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
+    queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
+    return Backendless.Data.of( 'user_data' ).find( queryBuilder )
+      .then( ( foundUsers: User[] ) => {
+        this.access_comment = foundUsers[0].access_write;
+        console.log(this.access_comment);
       })
       .catch( function( fault ) {
         return null;

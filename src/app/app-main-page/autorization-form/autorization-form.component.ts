@@ -41,6 +41,7 @@ export class AutorizationFormComponent implements OnInit {
           return {Incorrect_data: 'login or password incorret'};
         } else {
           if (this.authorization_form.controls['login'].invalid) {
+            // console.log(1);
             this.authorization_form.controls['login'].updateValueAndValidity();
           }
           return null;
@@ -62,6 +63,7 @@ export class AutorizationFormComponent implements OnInit {
         } else {
           if (this.authorization_form.controls['password'].invalid) {
             this.authorization_form.controls['password'].updateValueAndValidity();
+            // console.log(2);
           }
           return null;
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DoCheck, OnInit} from '@angular/core';
 import {Article, ArticleName, ArticleService, ArticleTopic} from '../../article.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Router} from '@angular/router';
@@ -6,13 +6,14 @@ import {FormBuilder, FormGroup, Validators, FormControl, ValidationErrors, Abstr
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Location} from '@angular/common';
+import {UsersService} from '../../users.service';
 
 @Component({
   selector: 'app-add-article',
   templateUrl: './add-article.component.html',
   styleUrls: ['./add-article.component.less']
 })
-export class AddArticleComponent implements OnInit {
+export class AddArticleComponent implements OnInit, DoCheck {
   topic: string;
   add_form: FormGroup;
   suggest = 0;
@@ -26,7 +27,7 @@ export class AddArticleComponent implements OnInit {
   email_current_user = '';
   login = '';
   constructor(public articleService: ArticleService, private activatedRoute: ActivatedRoute,
-              public router: Router, public fb: FormBuilder, private location: Location) { }
+              public router: Router, public fb: FormBuilder, private location: Location, private userService: UsersService) { }
 
   ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -45,6 +46,18 @@ export class AddArticleComponent implements OnInit {
         this.suggest = 1;
       }
     });
+    this.userService.Load_access_suggest_by_login(this.login);
+    // console.log(this.userService.access_suugest);
+    // if (this.userService.access_suugest === '0') {
+      // this.router.navigate(['']);
+    // }
+  }
+  ngDoCheck(): void {
+    // console.log(this.userService.access_suugest);
+    if (this.userService.access_suugest === '0') {
+      // console.log();
+      this.router.navigate(['']);
+    }
   }
   InitForm(): void {
     this.add_form = this.fb.group({

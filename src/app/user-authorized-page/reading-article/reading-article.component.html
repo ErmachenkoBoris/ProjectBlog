@@ -3,7 +3,7 @@
     X</button>
 
   <div class="article_content">{{this.articleService.article_read.article}}</div>
-  <div class="article__comment" *ngIf="this.access_comment(this.articleService.article_read) && this.access_write==='1'">
+  <div class="article__comment" *ngIf="this.access_comment(this.articleService.article_read) && this.userService.access_comment==='1'">
     <div class="comment__header">Comments</div>
     <div class="comment__item" *ngFor="let comment of this.commentService.comments">
       <p class="item__author">{{comment.author}}:</p>

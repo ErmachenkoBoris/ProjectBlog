@@ -1,10 +1,9 @@
 import {Component, DoCheck, OnInit} from '@angular/core';
-import {User, UsersService} from '../../users.service';
+import {UsersService} from '../../users.service';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {ChangeDetectorRef} from '@angular/core';
-import {AddUserComponent} from './add-user/add-user.component';
-import {ArticleTopic} from '../../article.service';
+import {User} from '../../UserClass';
 
 @Component({
   selector: 'app-user-control',
