@@ -31,33 +31,35 @@
       field is required</div>
 
     <div>Scope for WRITE COMMENT</div>
-    <div>
-      <input #alll type="checkbox"  (change)="this.Change_comment_scope()" checked="checked">for all
+    <div style="display: inline-block; margin-left: 5vw">
+      <input  #alll type="checkbox"  (change)="this.Change_comment_scope(); this.Change_comment_scope__item()" checked="checked">for all
     </div>
-    <div *ngIf="!alll.checked">
+    <div *ngIf="!alll.checked" style="display: inline-block; margin-left: 5vw">
       <input #mee  type="checkbox" checked="checked"  (change)="Change_comment_scope__item()">only for me
     </div>
 
-    <div *ngIf="this.scope_comment_boolean__item">
-      write emails:
+    <div *ngIf="!this.scope_comment_boolean__item && !alll.checked" style="display: inline-block; margin-left: 5vw">
+      Write emails:
     </div>
-    <input *ngIf="this.scope_comment_boolean__item" type="text" placeholder="write emails" formControlName="scope_comment">
+    <input *ngIf="!this.scope_comment_boolean__item && !alll.checked" type="text" placeholder="write emails" formControlName="scope_comment">
 
-    <div>Scope for READ ARTICLE</div>
-    <div>
+    <div >Scope for READ ARTICLE</div>
+    <div style="display: inline-block; margin-left: 5vw">
       <input #alll1 type="checkbox"  (change)="this.Change_reading_scope()" checked="checked">for all
-    </div>
-    <div *ngIf="!alll1.checked">
+    </div >
+    <div *ngIf="!alll1.checked" style="display: inline-block; margin-left: 5vw">
       <input #meee  type="checkbox" checked="checked"  (change)="Change_reading_scope__item()">only for me
     </div>
 
-    <div *ngIf="this.scope_read_boolean__item">
-      write emails:
+    <div *ngIf="this.scope_read_boolean__item && !alll1.checked" style="display: inline-block; margin-left: 5vw">
+      Write emails:
     </div>
-    <input *ngIf="this.scope_read_boolean__item" type="text" placeholder="write emails" formControlName="scope_read">
+    <input *ngIf="this.scope_read_boolean__item && !alll1.checked" type="text" placeholder="write emails" formControlName="scope_read">
 
+    <div>
     <button class="add_form__button_cansel" (click)="this.location.back();">Cansel</button>
     <button class="add_form__button_add" (click)="Submit_add_form()">Add</button>
+    </div>
   </form>
 </div>
 </div>

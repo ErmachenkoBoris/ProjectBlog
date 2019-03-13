@@ -157,6 +157,7 @@ export class AddArticleComponent implements OnInit, DoCheck {
     this.scope_read_boolean__item = !this.scope_read_boolean__item;
   }
   Change_comment_scope__item(): void {
+    // console.log(1);
     this.scope_comment_boolean__item = !this.scope_comment_boolean__item;
   }
 }

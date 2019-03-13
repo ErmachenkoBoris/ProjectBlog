@@ -1,4 +1,4 @@
-import {Component, DoCheck, OnChanges, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, DoCheck, OnChanges, OnInit} from '@angular/core';
 import {Article, ArticleName} from '../article.service';
 import {ArticleTopic} from '../article.service';
 import {ArticleService} from '../article.service';
@@ -13,7 +13,7 @@ import {User} from '../UserClass';
 })
 export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   constructor(public articleService: ArticleService, public router: Router, public activatedRoute: ActivatedRoute,
-              public userService: UsersService) {
+              public userService: UsersService, public changeDetectorRef: ChangeDetectorRef) {
   }
   read_article = 0;
   update = 0;
@@ -64,10 +64,13 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     }
   }
   ngDoCheck(): void {
+    if (this.userService.access_suugest === '') {
+      this.userService.Load_access_suggest_by_login(this.loginUser);
+    }
     // console.log(1);
-    if (this.articleService.articles_choosen_names && this.update) {
+    /*if (this.articleService.articles_choosen_names && this.update) {
       this.update = 0;
-      // console.log(100);
+      console.log(100);
       this.userService.Load_access_suggest_by_login(this.loginUser);
       let k = 0;
       for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
@@ -80,7 +83,8 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
         }
       }
       this.article_Name.length = k + 1;
-    }
+      this.changeDetectorRef.detectChanges();
+    }*/
   }
   change_back_info(index: number): void {
     if (index !== 10) {
@@ -96,7 +100,37 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
 
   choose_articles(name: string): void {
     this.update = 1;
-    this.articleService.Load_choose_Articles_names(name);
+    this.articleService.Load_choose_Articles_names(name).then(() => {
+      this.userService.Load_access_suggest_by_login(this.loginUser);
+      let k = 0;
+      for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
+        const flag = this.access_read(this.articleService.articles_choosen_names[i]);
+        if (flag) {
+          this.article_Name[k] = this.articleService.articles_choosen_names[i];
+          if (this.articleService.articles_choosen_names.length !== i + 1) {
+            k++;
+          }
+        }
+      }
+      this.article_Name.length = k + 1;
+    });
+    // if (this.update) {
+      // this.update = 0;
+      // console.log(100);
+      /*
+      this.userService.Load_access_suggest_by_login(this.loginUser);
+      let k = 0;
+      for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
+        const flag = this.access_read(this.articleService.articles_choosen_names[i]);
+        if (flag) {
+          this.article_Name[k] = this.articleService.articles_choosen_names[i];
+          if (this.articleService.articles_choosen_names.length !== i + 1) {
+            k++;
+          }
+        }
+      }
+      this.article_Name.length = k + 1;
+    }*/
   }
 
   Set_name(name: string): void {

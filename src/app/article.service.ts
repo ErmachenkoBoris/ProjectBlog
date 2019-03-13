@@ -105,11 +105,14 @@ constructor() {
       this.articles = articles;
     });
   }
-  Load_all_names_topic(): void {
+  Load_all_names_topic(): Promise<void> {
     const queryBuilder = Backendless.DataQueryBuilder.create();
     queryBuilder.setPageSize( 50 ).setOffset( 0 ).setSortBy( ['id'] );
-    Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
-      this.article_names = articleName;
+    return new Promise<void>( (ok) => {
+      Backendless.Data.of('article_name').find<any>(queryBuilder).then((articleName) => {
+        this.article_names = articleName;
+        ok();
+      });
     });
   }
   Load_all_topics(): void {
@@ -175,18 +178,21 @@ constructor() {
       });
 
   }*/
-  Load_choose_Articles_names (topicArticle: string): any {
+  Load_choose_Articles_names (topicArticle: string): Promise<void> {
     const whereClause = `topic = '${topicArticle}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
-    Backendless.Data.of( 'article_name' ).find( queryBuilder )
-      .then( ( foundArticles: ArticleName[] ) => {
-        this.articles_choosen_names = foundArticles;
-      })
-      .catch( function( fault ) {
-        return null;
-      });
-    this.Load_count_names ();
+    return new Promise<void>((ok) => {
+      Backendless.Data.of('article_name').find(queryBuilder)
+        .then((foundArticles: ArticleName[]) => {
+          this.articles_choosen_names = foundArticles;
+          ok();
+        })
+        .catch(function (fault) {
+          return null;
+        });
+      this.Load_count_names();
+    });
   }
 
   Load_count_names (): any {
@@ -256,36 +262,39 @@ constructor() {
       this.Load_all_names_topic();
     });
   }
-  Delete_article(article: string): void {
+  Delete_article(article: string): Promise<void> {
     const whereClause = `name = '${article}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
-    Backendless.Data.of( 'article_data' ).find( queryBuilder )
-      .then( ( foundArticle: Res[] ) => {
-        this.result_data = foundArticle[0].objectId; // можно и без него обойтись
-        Backendless.Data.of('article_data').remove(foundArticle[0])
-          .then(function (timestamp) {
-           // this.Load_all_names_topic();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      })
-      .catch( function( fault ) {
-      });
-    Backendless.Data.of( 'article_name').find( queryBuilder )
-      .then( ( foundArticles: Res[] ) => {
-        this.result_name = foundArticles[0].objectId; // можно и без него обойтись
-        Backendless.Data.of('article_name').remove(foundArticles[0])
-          .then((timestamp) => {
-            this.Load_all_names_topic();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      })
-      .catch( function( fault ) {
-      });
+    return new Promise<void>( ok => {
+      Backendless.Data.of('article_data').find(queryBuilder)
+        .then((foundArticle: Res[]) => {
+          this.result_data = foundArticle[0].objectId; // можно и без него обойтись
+          Backendless.Data.of('article_data').remove(foundArticle[0])
+            .then(function (timestamp) {
+              // this.Load_all_names_topic();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (fault) {
+        });
+      Backendless.Data.of('article_name').find(queryBuilder)
+        .then((foundArticles: Res[]) => {
+          this.result_name = foundArticles[0].objectId; // можно и без него обойтись
+          Backendless.Data.of('article_name').remove(foundArticles[0])
+            .then((timestamp) => {
+              this.Load_all_names_topic();
+              ok(); // !!!!!
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (fault) {
+        });
+    });
   }
   Delete_article_name(article: string): Promise<void> {
     const whereClause = `name = '${article}'`;
