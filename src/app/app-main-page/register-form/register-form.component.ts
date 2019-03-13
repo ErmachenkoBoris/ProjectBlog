@@ -110,7 +110,7 @@ export class RegisterFormComponent implements OnInit {
   public Email_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.usersService.Search_email(control.value).pipe(map(response => {
       if (response) {
-        if (response.length !== 1) {
+        if (response.userExist) {
           return {emailExist: 'email is used'};
         } else {
           return null;
@@ -123,7 +123,7 @@ export class RegisterFormComponent implements OnInit {
   public Login_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.usersService.Search_login(control.value).pipe(map(response => {
       if (response) {
-        if (response.length !== 1) {
+        if (response.loginExist) {
           return {loginExist: 'login is already taken'};
         } else {
           return null;

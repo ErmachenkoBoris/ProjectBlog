@@ -157,28 +157,6 @@ body {
     height: 40px;
     padding: 0 40px;
 
-
-    &:after, &:before {
-
-
-      color: @theme-color;
-      font-size: 2vh;
-      // line-height: 20vw;
-
-      -webkit-animation-name: opacity;
-      -webkit-animation-duration: 2s;
-      -webkit-animation-iteration-count: infinite;
-      animation-name: opacity;
-      animation-duration: 2s;
-      animation-iteration-count: infinite;
-    }
-
-    &__text {
-      //display: inline;
-      //float: left;
-     // margin: 0;
-    }
-
     &__list {
       margin-top: 0;
       //padding-left: 110px;
@@ -200,10 +178,6 @@ body {
   }
 }
 
-@-webkit-keyframes opacity {
-  0%, 100% {opacity:0;}
-  50% {opacity:1;}
-}
 
 @-webkit-keyframes change {
   0%, 12.66%, 100% {transform:translate3d(0,0,0);}
@@ -212,11 +186,6 @@ body {
   49.98%,62.64% {transform:translate3d(0,-75%,0);}
   66.64%,79.3% {transform:translate3d(0,-50%,0);}
   83.3%,95.96% {transform:translate3d(0,-25%,0);}
-}
-
-@-o-keyframes opacity {
-  0%, 100% {opacity:0;}
-  50% {opacity:1;}
 }
 
 @-o-keyframes change {
@@ -228,10 +197,6 @@ body {
   83.3%,95.96% {transform:translate3d(0,-25%,0);}
 }
 
-@-moz-keyframes opacity {
-  0%, 100% {opacity:0;}
-  50% {opacity:1;}
-}
 
 @-moz-keyframes change {
   0%, 12.66%, 100% {transform:translate3d(0,0,0);}
@@ -242,10 +207,6 @@ body {
   83.3%,95.96% {transform:translate3d(0,-25%,0);}
 }
 
-@keyframes opacity {
-  0%, 100% {opacity:0;}
-  50% {opacity:1;}
-}
 
 @keyframes change {
   0%, 12.66%, 100% {transform:translate3d(0,0,0);}

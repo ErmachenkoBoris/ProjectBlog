@@ -116,7 +116,7 @@ export class AddArticleAdminComponent implements OnInit {
   public Name_article_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.articleService.Search_name_article(control.value).pipe(map(response => {
       if (response) {
-        if (response.length !== 1) {
+        if (response.nameExist) {
           return {nameExist: 'Article with this name is already exist'};
         } else {
           return null;

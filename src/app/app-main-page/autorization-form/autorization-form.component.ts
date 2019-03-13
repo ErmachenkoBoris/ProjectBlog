@@ -37,7 +37,7 @@ export class AutorizationFormComponent implements OnInit {
   public Login_and_password_validator(control: AbstractControl): Observable<ValidationErrors | null> {
     return this.usesrService.Search_user_by_login_and_password(this.authorization_form.value.login, control.value).pipe(map(response => {
       if (response) {
-        if (response.length !== 1) {
+        if (response.WrongData) {
           return {Incorrect_data: 'login or password incorret'};
         } else {
           if (this.authorization_form.controls['login'].invalid) {
@@ -58,8 +58,11 @@ export class AutorizationFormComponent implements OnInit {
     return this.usesrService.Search_user_by_login_and_password(control.value, this.authorization_form.value.password).pipe( map(
       response => {
       if (response) {
-        if (response.length !== 1) {
+        // console.log(response);
+        // console.log(response.WrongData);
+        if (response.WrongData) {
           return {Incorrect_data: 'login or password incorret'};
+          // console.log(response.WrongData);
         } else {
           if (this.authorization_form.controls['password'].invalid) {
             this.authorization_form.controls['password'].updateValueAndValidity();
@@ -78,7 +81,7 @@ export class AutorizationFormComponent implements OnInit {
   public Login_validator = (control: AbstractControl): Observable<ValidationErrors | null> => {
     return this.usesrService.Search_login(control.value).pipe(map(response => {
       if (response) {
-        if (response.length !== 1) {
+        if (response.loginExist) {
           return null;
         } else {
           return {LoginNoExist: 'Login No exist'};
