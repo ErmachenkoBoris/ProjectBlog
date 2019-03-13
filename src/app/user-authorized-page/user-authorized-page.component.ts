@@ -16,6 +16,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
               public userService: UsersService) {
   }
   read_article = 0;
+  update = 0;
   name_for_read: string;
   back_color = '#0e60a1';
   select_button_index = -1;
@@ -29,6 +30,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   scope_read_boolean__item = false;
   scope_comment_boolean__item = false;
   ngOnInit(): void {
+    // console.log(1000);
     this.userService.Load_access_suggest_by_login(this.loginUser);
     this.activatedRoute.params.subscribe((params: Params) => {
        this.loginUser = params['login'];
@@ -62,7 +64,10 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
     }
   }
   ngDoCheck(): void {
-    if (this.articleService.articles_choosen_names) {
+    // console.log(1);
+    if (this.articleService.articles_choosen_names && this.update) {
+      this.update = 0;
+      // console.log(100);
       this.userService.Load_access_suggest_by_login(this.loginUser);
       let k = 0;
       for (let i = 0; i < this.articleService.articles_choosen_names.length; i++) {
@@ -90,6 +95,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
   }
 
   choose_articles(name: string): void {
+    this.update = 1;
     this.articleService.Load_choose_Articles_names(name);
   }
 
@@ -117,7 +123,7 @@ export class UserAuthorizedPageComponent implements OnInit, DoCheck {
         }
       }
     }
-    console.log(3);
+    // console.log(3);
     return 0;
 }
   Change_reading_scope(): void {

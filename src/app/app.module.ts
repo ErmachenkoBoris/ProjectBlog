@@ -6,7 +6,7 @@ import {APP_BASE_HREF} from '@angular/common';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppMainPageComponent } from './app-main-page/app-main-page.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AutorizationFormComponent } from './app-main-page/autorization-form/autorization-form.component';
 import { RegisterFormComponent } from './app-main-page/register-form/register-form.component';
 import { AppRoutingModule } from './app-routing.module';

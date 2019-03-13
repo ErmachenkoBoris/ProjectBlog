@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, OnInit} from '@angular/core';
+import {Component, DoCheck, Input, OnChanges, OnInit} from '@angular/core';
 import {Article, ArticleName} from '../../article.service';
 import {ArticleService} from '../../article.service';
 import {ActivatedRoute, Params} from '@angular/router';
@@ -13,7 +13,7 @@ import {UsersService} from '../../users.service';
   templateUrl: './reading-article.component.html',
   styleUrls: ['./reading-article.component.less']
 })
-export class ReadingArticleComponent implements OnInit, DoCheck {
+export class ReadingArticleComponent implements OnInit, DoCheck, OnChanges {
   @Input() article_name = '';
   login: string;
   email: string;
@@ -54,10 +54,15 @@ export class ReadingArticleComponent implements OnInit, DoCheck {
       this.commentService.Load_count_comment();
     }
   }
+  ngOnChanges(): void {
+    // console.log(5);
+  }
 
-  ngDoCheck(): void {
+  ngDoCheck(): void { // не нужен нафиг
+    // console.log(2);
     // this.userService.Load_access_comment_by_login(this.login);
     if (this.article_name !== this.article_old) {
+     // console.log(1);
       this.userService.Load_access_comment_by_login(this.login);
       this.article_old = this.article_name;
       this.articleService.Load_article_for_read(this.article_name);

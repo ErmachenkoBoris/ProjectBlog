@@ -1,6 +1,6 @@
 <div class="article_add">
   <div [ngSwitch]="this.Return_suggest()">
-  <div *ngSwitchCase="0" class="article_add__header">Write an article in the section {{this.topic}}
+  <div *ngSwitchCase="0" class="article_add__header">Write an article in the section {{this.topic}} <!--Для предложения топика -->
     <button (click)="this.Close_add_form()" class="close_add_form_bottom">
       X
     </button>

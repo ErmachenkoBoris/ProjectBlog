@@ -91,7 +91,7 @@ export class ArticleService {
   public article_read: Article = new Article('', '', 1, '', '');
   public topics: ArticleTopic[] = [];
   public article_names: ArticleName[] = [];
-  public email_found = 0;
+  // public email_found = 0;
   article_read_name: ArticleName;
 constructor() {
     this.Load_count_names();
@@ -119,6 +119,7 @@ constructor() {
       this.topics = topics;
     });
   }
+  /*
   Search_email(email: string): Observable<ValidationErrors> {
     const whereClause = `email = '${email}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
@@ -139,7 +140,7 @@ constructor() {
       });
     });
   }
-
+*/
   Search_name_article(name: string): Observable<ValidationErrors> {
     const whereClause = `name = '${name}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
@@ -160,6 +161,7 @@ constructor() {
       });
     });
   }
+  /*
   Load_choose_Articles (topicArticle: string): any {
     const whereClause = `topic = '${topicArticle}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
@@ -172,7 +174,7 @@ constructor() {
         return null;
       });
 
-  }
+  }*/
   Load_choose_Articles_names (topicArticle: string): any {
     const whereClause = `topic = '${topicArticle}'`;
     const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause( whereClause );
@@ -230,12 +232,12 @@ constructor() {
       this.articles.push(savedArticle);
     });
   }
-  Update_Article(article: Article): Promise<void> {
+  /*Update_Article(article: Article): Promise<void> {
     this.names_count++;
     return Backendless.Data.of( 'article_data' ).save<Article>(article).then((savedArticle: Article) => {
       this.articles.push(savedArticle);
     });
-  }
+  }*/
   Add_article_topic(topic: ArticleTopic): Promise<void> {
     return Backendless.Data.of( 'article_topic' ).save<ArticleTopic>(topic).then((savedArticleTopic: ArticleTopic) => {
       this.topics.push(savedArticleTopic);
@@ -249,6 +251,7 @@ constructor() {
   }
   Update_article_name(name: ArticleName): Promise<void> {
     return Backendless.Data.of( 'article_name' ).save<ArticleName>(name).then((savedArticleName: ArticleName) => {
+      // this.Update_array_article_names(name);
       this.Update_array_article_names(name);
       this.Load_all_names_topic();
     });
@@ -259,7 +262,7 @@ constructor() {
     queryBuilder.setPageSize( PAGE_SIZE ).setOffset( 0 );
     Backendless.Data.of( 'article_data' ).find( queryBuilder )
       .then( ( foundArticle: Res[] ) => {
-        this.result_data = foundArticle[0].objectId;
+        this.result_data = foundArticle[0].objectId; // можно и без него обойтись
         Backendless.Data.of('article_data').remove(foundArticle[0])
           .then(function (timestamp) {
            // this.Load_all_names_topic();
@@ -272,7 +275,7 @@ constructor() {
       });
     Backendless.Data.of( 'article_name').find( queryBuilder )
       .then( ( foundArticles: Res[] ) => {
-        this.result_name = foundArticles[0].objectId;
+        this.result_name = foundArticles[0].objectId; // можно и без него обойтись
         Backendless.Data.of('article_name').remove(foundArticles[0])
           .then((timestamp) => {
             this.Load_all_names_topic();

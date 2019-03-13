@@ -20,6 +20,7 @@ export class AdminAuthorisedPageComponent implements OnInit {
   background_menu_array: string[] = [];
   loginUser: string;
   currentUser: any;
+  // update = 0;
   ngOnInit(): void {
     this.articleService.Load_all_names_topic();
     this.activatedRoute.params.subscribe((params: Params) => {
