@@ -234,8 +234,11 @@ constructor() {
   }
   Add_Article(article: Article): Promise<void> {
     this.names_count++;
-    return Backendless.Data.of( 'article_data' ).save<Article>(article).then((savedArticle: Article) => {
-      this.articles.push(savedArticle);
+    return new Promise<void> ( (ok) => {
+      Backendless.Data.of( 'article_data' ).save<Article>(article).then((savedArticle: Article) => {
+        this.articles.push(savedArticle);
+        ok();
+      });
     });
   }
   /*Update_Article(article: Article): Promise<void> {
@@ -245,9 +248,12 @@ constructor() {
     });
   }*/
   Add_article_topic(topic: ArticleTopic): Promise<void> {
-    return Backendless.Data.of( 'article_topic' ).save<ArticleTopic>(topic).then((savedArticleTopic: ArticleTopic) => {
+    return new Promise<void>( (ok) => {
+      Backendless.Data.of( 'article_topic' ).save<ArticleTopic>(topic).then((savedArticleTopic: ArticleTopic) => {
       this.topics.push(savedArticleTopic);
+      ok();
     });
+  });
   }
   Add_article_name(name: ArticleName): Promise<void> {
     return Backendless.Data.of( 'article_name' ).save<ArticleName>(name).then((savedArticleName: ArticleName) => {

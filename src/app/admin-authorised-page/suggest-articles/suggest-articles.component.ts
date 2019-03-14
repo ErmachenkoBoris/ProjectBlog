@@ -80,7 +80,7 @@ export class SuggestArticlesComponent implements OnInit, DoCheck {
   Delete_article(article_name: string): void {
     this.busy = 1;
     this.articleService.Delete_article(article_name).then( () => {
-      console.log(1);
+     // console.log(1);
       this.Delete_suggest_article_in_local_array(article_name);
       this.articleService.Load_all_names_topic();
       this.changeDetectorRef.detectChanges();
@@ -89,7 +89,7 @@ export class SuggestArticlesComponent implements OnInit, DoCheck {
   Delete_suggest_article_in_local_array(article_name: string): void {
     const tmpArticleTopic: ArticleName[] = [];
     let k = 0;
-    console.log(article_name);
+    // console.log(article_name);
     for (let i = 0; i < this.suggest_names.length; i++) {
       if (this.suggest_names[i].name !== article_name) {
         tmpArticleTopic[k] = this.suggest_names[i];
@@ -99,18 +99,18 @@ export class SuggestArticlesComponent implements OnInit, DoCheck {
       }
     }
     this.suggest_names = [];
-    console.log(this.suggest_names);
+    // console.log(this.suggest_names);
     if (tmpArticleTopic.length) {
       this.suggest_names = tmpArticleTopic;
     } else {
       this.suggest_names.splice(0, this.suggest_names.length - 1); // = 0;
       while ( this.suggest_names.length > 0) {
-        console.log(this.suggest_names.length);
+       //  console.log(this.suggest_names.length);
         this.suggest_names.pop();
       }
-      console.log(this.suggest_names);
+      // console.log(this.suggest_names);
       this.suggest_names.length = 0;
-      console.log(this.suggest_names.length);
+      // console.log(this.suggest_names.length);
 
     }
 

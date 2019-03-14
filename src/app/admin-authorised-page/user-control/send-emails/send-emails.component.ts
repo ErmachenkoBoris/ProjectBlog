@@ -19,7 +19,7 @@ export class SendEmailsComponent implements OnInit {
 
   }
   checkBox(): number {
-    const element: any = document.querySelector('input[type=checkbox]');
+    // const element: any = document.querySelector('input[type=checkbox]');
     let chbox: any;
     chbox = document.getElementById('one');
     if (chbox.checked) {
@@ -29,11 +29,11 @@ export class SendEmailsComponent implements OnInit {
     }
   }
   send(): void {
-    for (let i = 0; i < this.usersService.users.length; i++) {
+    for (let i = 0; i < this.usersService.users.length; i++) { // если все!!!
       this.emails[i] = this.usersService.users[i].email;
     }
     let rec: string[] = [];
-    if (this.checkBox() && this.email_target) {
+    if (this.checkBox() && this.email_target) { // если указаны частично !!
       rec = this.email_target.split(' ');
       this.emails = rec;
     }

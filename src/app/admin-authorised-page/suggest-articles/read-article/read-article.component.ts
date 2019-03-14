@@ -44,12 +44,14 @@ export class ReadArticleComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
+    /*
     if (this.article_name !== this.article_old) {
       this.article_old = this.article_name;
       this.articleService.Load_article_for_read(this.article_name);
       this.article = this.articleService.article_read;
       this.commentService.get_comments_by_article(this.article_name);
     }
+    */
   }
   Close_article(): void {
     this.location.back();

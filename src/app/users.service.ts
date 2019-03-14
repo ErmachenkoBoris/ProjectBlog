@@ -222,7 +222,7 @@ export class UsersService {
     return Backendless.Data.of( 'user_data' ).find( queryBuilder )
       .then( ( foundUsers: User[] ) => {
         this.access_comment = foundUsers[0].access_write;
-        console.log(this.access_comment);
+        // console.log(this.access_comment);
       })
       .catch( function( fault ) {
         return null;

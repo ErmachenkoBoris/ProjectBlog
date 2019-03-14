@@ -115,9 +115,15 @@ export class AddArticleComponent implements OnInit, DoCheck {
       this.add_form.value.scope_comment
     );
     const promiseArticle_name = this.articleService.Add_article_name(newArticle_name);
-    if (promiseArticle && promiseArticle_name) {
-      this.location.back();
-    }
+    // if (promiseArticle && promiseArticle_name) {
+     // this.location.back();
+    // }
+    promiseArticle.then(() => {
+      promiseArticle_name.then(() => {
+        // console.log(1);
+        this.location.back();
+      });
+    });
     return 1;
   }
   Close_add_form(): void {

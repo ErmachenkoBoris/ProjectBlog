@@ -61,14 +61,16 @@ export class ReadingArticleComponent implements OnInit, DoCheck, OnChanges {
   ngDoCheck(): void { // не нужен нафиг
     // console.log(2);
     // this.userService.Load_access_comment_by_login(this.login);
+    /*
     if (this.article_name !== this.article_old) {
-     // console.log(1);
+     console.log(100);
       this.userService.Load_access_comment_by_login(this.login);
       this.article_old = this.article_name;
       this.articleService.Load_article_for_read(this.article_name);
       this.article = this.articleService.article_read;
       this.commentService.get_comments_by_article(this.article_name);
     }
+    */
   }
   Close_article(): void {
       this.location.back();

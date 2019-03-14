@@ -14,7 +14,7 @@
     Send NOT to all
   <input #check type="checkbox"  value="checked" (click)="this.checkBox()" id="one">
   </div>
-  <div *ngIf="checkBox(check)">
+  <div *ngIf="checkBox()">
       <input type="text" class="send_emails__options_item" placeholder="write emails" [(ngModel)]="email_target">
   </div>
   <button class="send_emails__button_send" (click)="send()">send</button>
